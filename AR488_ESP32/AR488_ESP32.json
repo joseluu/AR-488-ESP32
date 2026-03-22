@@ -1,7 +1,7 @@
 {
   "name": "AR488_ESP32",
-  "description": "AR-488 GPIB Interface for Tektronix TDS784A \u2014 ESP32 + SN75160/161 transceivers",
-  "tstamps": "/ar488_esp32-2902568110128/",
+  "description": "",
+  "tstamps": "/ar488_esp32-2361912281136/",
   "source_file": "AR488_ESP32.kicad_sch",
   "components": {
     "J1": {
@@ -1834,7 +1834,7 @@
       "symbol": "Device:C",
       "ref": "C1",
       "value": "10u",
-      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
       "datasheet": "~",
       "description": "Unpolarized capacitor",
       "properties": {
@@ -3666,36 +3666,5 @@
     }
   },
   "subcircuits": [],
-  "annotations": [
-    {
-      "type": "TextBox",
-      "text": "AR-488 GPIB Interface for Tektronix TDS784A \u2014 ESP32 + SN75160/161 transceivers",
-      "position": [
-        184.0,
-        110.0
-      ],
-      "size": [
-        80.0,
-        30.0
-      ],
-      "margins": [
-        1.0,
-        1.0,
-        1.0,
-        1.0
-      ],
-      "text_size": 1.2,
-      "bold": true,
-      "italic": false,
-      "text_color": "black",
-      "background": true,
-      "background_color": "lightyellow",
-      "border": true,
-      "border_width": 0.1,
-      "border_color": "black",
-      "justify": "center center",
-      "rotation": 0,
-      "uuid": "91b730c5-5856-4874-8f85-42b34e36ae01"
-    }
-  ]
+  "annotations": []
 }
