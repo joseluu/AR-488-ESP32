@@ -1,0 +1,398 @@
+ERC report (2026-03-22T00:00:25+0100, Encoding UTF8)
+
+***** Sheet /
+[pin_not_connected]: Hierarchical label "SDA" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(27.94 mm, 35.56 mm): Hierarchical Label 'SDA'
+[pin_not_connected]: Hierarchical label "SCL" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(27.94 mm, 38.10 mm): Hierarchical Label 'SCL'
+[pin_not_connected]: Pin not connected
+    ; error
+    @(27.94 mm, 50.80 mm): Symbol U4 Pin 19 [INTB, Tri-state, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(27.94 mm, 53.34 mm): Symbol U4 Pin 20 [INTA, Tri-state, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(63.50 mm, 35.56 mm): Symbol U4 Pin 1 [GPB0, Bidirectional, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(63.50 mm, 38.10 mm): Symbol U4 Pin 2 [GPB1, Bidirectional, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(63.50 mm, 40.64 mm): Symbol U4 Pin 3 [GPB2, Bidirectional, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(63.50 mm, 43.18 mm): Symbol U4 Pin 4 [GPB3, Bidirectional, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(63.50 mm, 45.72 mm): Symbol U4 Pin 5 [GPB4, Bidirectional, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(63.50 mm, 48.26 mm): Symbol U4 Pin 6 [GPB5, Bidirectional, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(63.50 mm, 50.80 mm): Symbol U4 Pin 7 [GPB6, Bidirectional, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(63.50 mm, 53.34 mm): Symbol U4 Pin 8 [GPB7, Output, Line]
+[pin_not_connected]: Hierarchical label "ATN" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(63.50 mm, 58.42 mm): Hierarchical Label 'ATN'
+[pin_not_connected]: Hierarchical label "IFC" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(63.50 mm, 60.96 mm): Hierarchical Label 'IFC'
+[pin_not_connected]: Hierarchical label "SRQ" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(63.50 mm, 63.50 mm): Hierarchical Label 'SRQ'
+[pin_not_connected]: Hierarchical label "REN" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(63.50 mm, 66.04 mm): Hierarchical Label 'REN'
+[pin_not_connected]: Hierarchical label "TE_CTRL" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 35.56 mm): Hierarchical Label 'TE_CTRL'
+[pin_not_connected]: Hierarchical label "TE_CTRL" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 35.56 mm): Hierarchical Label 'TE_CTRL'
+[pin_not_connected]: Hierarchical label "TE_CTRL" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(63.50 mm, 68.58 mm): Hierarchical Label 'TE_CTRL'
+[pin_not_connected]: Hierarchical label "DC" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 38.10 mm): Hierarchical Label 'DC'
+[pin_not_connected]: Hierarchical label "DC" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 38.10 mm): Hierarchical Label 'DC'
+[pin_not_connected]: Hierarchical label "DC" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(63.50 mm, 71.12 mm): Hierarchical Label 'DC'
+[pin_not_connected]: Hierarchical label "REN" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 43.18 mm): Hierarchical Label 'REN'
+[pin_not_connected]: Hierarchical label "REN" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 43.18 mm): Hierarchical Label 'REN'
+[pin_not_connected]: Pin not connected
+    ; error
+    @(63.50 mm, 73.66 mm): Symbol U4 Pin 27 [GPA6, Bidirectional, Line]
+[pin_not_connected]: Hierarchical label "IFC" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 45.72 mm): Hierarchical Label 'IFC'
+[pin_not_connected]: Hierarchical label "IFC" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 45.72 mm): Hierarchical Label 'IFC'
+[pin_not_connected]: Hierarchical label "NDAC" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 48.26 mm): Hierarchical Label 'NDAC'
+[pin_not_connected]: Hierarchical label "NDAC" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 48.26 mm): Hierarchical Label 'NDAC'
+[pin_not_connected]: Pin not connected
+    ; error
+    @(63.50 mm, 76.20 mm): Symbol U4 Pin 28 [GPA7, Output, Line]
+[pin_not_connected]: Hierarchical label "NRFD" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 50.80 mm): Hierarchical Label 'NRFD'
+[pin_not_connected]: Hierarchical label "NRFD" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 50.80 mm): Hierarchical Label 'NRFD'
+[pin_not_connected]: Hierarchical label "DAV" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 53.34 mm): Hierarchical Label 'DAV'
+[pin_not_connected]: Hierarchical label "DAV" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 53.34 mm): Hierarchical Label 'DAV'
+[pin_not_connected]: Hierarchical label "EOI" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 55.88 mm): Hierarchical Label 'EOI'
+[pin_not_connected]: Hierarchical label "EOI" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 55.88 mm): Hierarchical Label 'EOI'
+[pin_not_connected]: Hierarchical label "ATN" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 58.42 mm): Hierarchical Label 'ATN'
+[pin_not_connected]: Hierarchical label "ATN" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 58.42 mm): Hierarchical Label 'ATN'
+[pin_not_connected]: Hierarchical label "SRQ" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 60.96 mm): Hierarchical Label 'SRQ'
+[pin_not_connected]: Hierarchical label "SRQ" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(86.36 mm, 60.96 mm): Hierarchical Label 'SRQ'
+[pin_not_connected]: Hierarchical label "REN_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 43.18 mm): Hierarchical Label 'REN_B'
+[pin_not_connected]: Hierarchical label "REN_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 43.18 mm): Hierarchical Label 'REN_B'
+[pin_not_connected]: Hierarchical label "IFC_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 45.72 mm): Hierarchical Label 'IFC_B'
+[pin_not_connected]: Hierarchical label "IFC_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 45.72 mm): Hierarchical Label 'IFC_B'
+[pin_not_connected]: Hierarchical label "NDAC_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 48.26 mm): Hierarchical Label 'NDAC_B'
+[pin_not_connected]: Hierarchical label "NDAC_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 48.26 mm): Hierarchical Label 'NDAC_B'
+[pin_not_connected]: Hierarchical label "NRFD_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 50.80 mm): Hierarchical Label 'NRFD_B'
+[pin_not_connected]: Hierarchical label "NRFD_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 50.80 mm): Hierarchical Label 'NRFD_B'
+[pin_not_connected]: Hierarchical label "DAV_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 53.34 mm): Hierarchical Label 'DAV_B'
+[pin_not_connected]: Hierarchical label "DAV_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 53.34 mm): Hierarchical Label 'DAV_B'
+[pin_not_connected]: Hierarchical label "EOI_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 55.88 mm): Hierarchical Label 'EOI_B'
+[pin_not_connected]: Hierarchical label "EOI_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 55.88 mm): Hierarchical Label 'EOI_B'
+[pin_not_connected]: Hierarchical label "ATN_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 58.42 mm): Hierarchical Label 'ATN_B'
+[pin_not_connected]: Hierarchical label "ATN_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 58.42 mm): Hierarchical Label 'ATN_B'
+[pin_not_connected]: Hierarchical label "SRQ_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 60.96 mm): Hierarchical Label 'SRQ_B'
+[pin_not_connected]: Hierarchical label "SRQ_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(111.76 mm, 60.96 mm): Hierarchical Label 'SRQ_B'
+[pin_not_connected]: Hierarchical label "LDO_IN" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(35.56 mm, 134.62 mm): Hierarchical Label 'LDO_IN'
+[pin_not_connected]: Hierarchical label "LDO_IN" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(35.56 mm, 134.62 mm): Hierarchical Label 'LDO_IN'
+[pin_not_connected]: Hierarchical label "DIO1" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(137.16 mm, 35.56 mm): Hierarchical Label 'DIO1'
+[pin_not_connected]: Hierarchical label "DIO2" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(137.16 mm, 38.10 mm): Hierarchical Label 'DIO2'
+[pin_not_connected]: Hierarchical label "Q1_GATE" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(27.94 mm, 139.70 mm): Hierarchical Label 'Q1_GATE'
+[pin_not_connected]: Hierarchical label "Q1_GATE" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(27.94 mm, 139.70 mm): Hierarchical Label 'Q1_GATE'
+[pin_not_connected]: Hierarchical label "DIO3" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(137.16 mm, 40.64 mm): Hierarchical Label 'DIO3'
+[pin_not_connected]: Hierarchical label "DIO4" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(137.16 mm, 43.18 mm): Hierarchical Label 'DIO4'
+[pin_not_connected]: Hierarchical label "DIO5" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(137.16 mm, 45.72 mm): Hierarchical Label 'DIO5'
+[pin_not_connected]: Hierarchical label "DIO6" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(137.16 mm, 48.26 mm): Hierarchical Label 'DIO6'
+[pin_not_connected]: Pin not connected
+    ; error
+    @(71.12 mm, 127.00 mm): Symbol J2 Pin 1 [Passive, Line]
+[pin_not_connected]: Hierarchical label "DIO7" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(137.16 mm, 50.80 mm): Hierarchical Label 'DIO7'
+[pin_not_connected]: Hierarchical label "DIO8" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(137.16 mm, 53.34 mm): Hierarchical Label 'DIO8'
+[pin_not_connected]: Pin not connected
+    ; error
+    @(35.56 mm, 144.78 mm): Symbol Q1 Pin 1 [S, Passive, Line]
+[pin_not_connected]: Hierarchical label "DIO1_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(157.48 mm, 35.56 mm): Hierarchical Label 'DIO1_B'
+[pin_not_connected]: Hierarchical label "DIO2_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(157.48 mm, 38.10 mm): Hierarchical Label 'DIO2_B'
+[pin_not_connected]: Hierarchical label "Q1_GATE" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(91.44 mm, 135.89 mm): Hierarchical Label 'Q1_GATE'
+[pin_not_connected]: Hierarchical label "LDO_IN" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(116.84 mm, 133.35 mm): Hierarchical Label 'LDO_IN'
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(180.34 mm, 27.94 mm): Symbol #PWR028 Pin 1 [Power input, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(180.34 mm, 30.48 mm): Symbol U1 Pin 5 [Pin_5, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(180.34 mm, 33.02 mm): Symbol U1 Pin 7 [Pin_7, Passive, Line]
+[pin_not_connected]: Hierarchical label "DIO1" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(180.34 mm, 35.56 mm): Hierarchical Label 'DIO1'
+[pin_not_connected]: Hierarchical label "DIO2" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(180.34 mm, 38.10 mm): Hierarchical Label 'DIO2'
+[pin_not_connected]: Hierarchical label "DIO3" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(180.34 mm, 40.64 mm): Hierarchical Label 'DIO3'
+[pin_not_connected]: Hierarchical label "DIO4" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(180.34 mm, 43.18 mm): Hierarchical Label 'DIO4'
+[pin_not_connected]: Hierarchical label "DIO5" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(180.34 mm, 45.72 mm): Hierarchical Label 'DIO5'
+[pin_not_connected]: Hierarchical label "DIO6" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(180.34 mm, 48.26 mm): Hierarchical Label 'DIO6'
+[pin_not_connected]: Hierarchical label "DIO7" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(180.34 mm, 50.80 mm): Hierarchical Label 'DIO7'
+[pin_not_connected]: Hierarchical label "DIO8" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(180.34 mm, 53.34 mm): Hierarchical Label 'DIO8'
+[pin_not_connected]: Pin not connected
+    ; error
+    @(180.34 mm, 55.88 mm): Symbol U1 Pin 25 [Pin_25, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(180.34 mm, 58.42 mm): Symbol U1 Pin 27 [Pin_27, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(180.34 mm, 60.96 mm): Symbol U1 Pin 29 [Pin_29, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(180.34 mm, 63.50 mm): Symbol U1 Pin 31 [Pin_31, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(180.34 mm, 66.04 mm): Symbol U1 Pin 33 [Pin_33, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(180.34 mm, 68.58 mm): Symbol U1 Pin 35 [Pin_35, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(193.04 mm, 30.48 mm): Symbol U1 Pin 6 [Pin_6, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(193.04 mm, 33.02 mm): Symbol U1 Pin 8 [Pin_8, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(193.04 mm, 35.56 mm): Symbol U1 Pin 10 [Pin_10, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(193.04 mm, 38.10 mm): Symbol U1 Pin 12 [Pin_12, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(193.04 mm, 40.64 mm): Symbol U1 Pin 14 [Pin_14, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(193.04 mm, 43.18 mm): Symbol U1 Pin 16 [Pin_16, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(193.04 mm, 45.72 mm): Symbol U1 Pin 18 [Pin_18, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(193.04 mm, 48.26 mm): Symbol U1 Pin 20 [Pin_20, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(193.04 mm, 50.80 mm): Symbol U1 Pin 22 [Pin_22, Passive, Line]
+[pin_not_connected]: Hierarchical label "TE_DATA" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(193.04 mm, 53.34 mm): Hierarchical Label 'TE_DATA'
+[pin_not_connected]: Hierarchical label "DAV" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(193.04 mm, 55.88 mm): Hierarchical Label 'DAV'
+[pin_not_connected]: Hierarchical label "NRFD" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(193.04 mm, 58.42 mm): Hierarchical Label 'NRFD'
+[pin_not_connected]: Hierarchical label "NDAC" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(193.04 mm, 60.96 mm): Hierarchical Label 'NDAC'
+[pin_not_connected]: Hierarchical label "EOI" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(193.04 mm, 63.50 mm): Hierarchical Label 'EOI'
+[pin_not_connected]: Hierarchical label "SCL" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(193.04 mm, 66.04 mm): Hierarchical Label 'SCL'
+[pin_not_connected]: Hierarchical label "SDA" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(193.04 mm, 68.58 mm): Hierarchical Label 'SDA'
+[pin_not_connected]: Hierarchical label "DIO1_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 25.40 mm): Hierarchical Label 'DIO1_B'
+[pin_not_connected]: Hierarchical label "DIO2_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 27.94 mm): Hierarchical Label 'DIO2_B'
+[pin_not_connected]: Hierarchical label "DIO3_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 30.48 mm): Hierarchical Label 'DIO3_B'
+[pin_not_connected]: Hierarchical label "DIO4_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 33.02 mm): Hierarchical Label 'DIO4_B'
+[pin_not_connected]: Hierarchical label "EOI_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 35.56 mm): Hierarchical Label 'EOI_B'
+[pin_not_connected]: Hierarchical label "DAV_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 38.10 mm): Hierarchical Label 'DAV_B'
+[pin_not_connected]: Hierarchical label "NRFD_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 40.64 mm): Hierarchical Label 'NRFD_B'
+[pin_not_connected]: Hierarchical label "NDAC_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 43.18 mm): Hierarchical Label 'NDAC_B'
+[pin_not_connected]: Hierarchical label "IFC_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 45.72 mm): Hierarchical Label 'IFC_B'
+[pin_not_connected]: Hierarchical label "SRQ_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 48.26 mm): Hierarchical Label 'SRQ_B'
+[pin_not_connected]: Hierarchical label "ATN_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(215.90 mm, 50.80 mm): Hierarchical Label 'ATN_B'
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(215.90 mm, 53.34 mm): Symbol #PWR001 Pin 1 [Power input, Line]
+[pin_not_connected]: Hierarchical label "DIO5_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(228.60 mm, 25.40 mm): Hierarchical Label 'DIO5_B'
+[pin_not_connected]: Hierarchical label "DIO6_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(228.60 mm, 27.94 mm): Hierarchical Label 'DIO6_B'
+[pin_not_connected]: Hierarchical label "DIO7_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(228.60 mm, 30.48 mm): Hierarchical Label 'DIO7_B'
+[pin_not_connected]: Hierarchical label "DIO8_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(228.60 mm, 33.02 mm): Hierarchical Label 'DIO8_B'
+[pin_not_connected]: Hierarchical label "REN_B" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(228.60 mm, 35.56 mm): Hierarchical Label 'REN_B'
+[pin_not_connected]: Hierarchical label "LDO_IN" in root sheet cannot be connected to non-existent parent sheet
+    ; error
+    @(251.46 mm, 30.48 mm): Hierarchical Label 'LDO_IN'
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(251.46 mm, 30.48 mm): Symbol U5 Pin 3 [VI, Power input, Line]
+[lib_symbol_mismatch]: Symbol 'MCP23017_SO' doesn't match copy in library 'Interface_Expansion'
+    ; warning
+    @(45.72 mm, 55.88 mm): Symbol U4 [MCP23017_SO]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'AR488_custom'
+    ; warning
+    @(99.06 mm, 53.34 mm): Symbol U3 [SN75161BN]
+[lib_symbol_issues]: The current configuration does not include the symbol library 'AR488_custom'
+    ; warning
+    @(33.02 mm, 139.70 mm): Symbol Q1 [AO4407A]
+[footprint_link_issues]: The current configuration does not include the footprint library 'AR488_custom'.
+    ; warning
+    @(185.42 mm, 45.72 mm): Symbol U1 [Conn_02x18_Odd_Even]
+[footprint_link_issues]: The current configuration does not include the footprint library 'AR488_custom'.
+    ; warning
+    @(220.98 mm, 38.10 mm): Symbol J1 [Conn_02x12_Odd_Even]
+
+ ** ERC messages: 131  Errors 126  Warnings 5
