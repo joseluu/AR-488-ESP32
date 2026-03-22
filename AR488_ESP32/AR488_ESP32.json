@@ -1,0 +1,3701 @@
+{
+  "name": "AR488_ESP32",
+  "description": "AR-488 GPIB Interface for Tektronix TDS784A \u2014 ESP32 + SN75160/161 transceivers",
+  "tstamps": "/ar488_esp32-2902568110128/",
+  "source_file": "AR488_ESP32.kicad_sch",
+  "components": {
+    "J1": {
+      "symbol": "Connector_Generic:Conn_02x12_Top_Bottom",
+      "ref": "J1",
+      "value": "GPIB_24",
+      "footprint": "AR488_custom:Centronics_24_GPIB",
+      "datasheet": "~",
+      "description": "Generic connector, double row, 02x12, top/bottom pin numbering scheme (row 1: 1...pins_per_row, row2: pins_per_row+1 ... num_pins), script generated (kicad-library-utils/schlib/autogen/connector/)",
+      "properties": {
+        "ki_fp_filters": "Connector*:*_2x??_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "Connector*:*_2x??_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "Pin_1",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 12.7,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "2",
+          "name": "Pin_2",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 10.16,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "3",
+          "name": "Pin_3",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 7.62,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "4",
+          "name": "Pin_4",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 5.08,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "5",
+          "name": "Pin_5",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 2.54,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "6",
+          "name": "Pin_6",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 0.0,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "7",
+          "name": "Pin_7",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -2.54,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "8",
+          "name": "Pin_8",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -5.08,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "9",
+          "name": "Pin_9",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -7.62,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "10",
+          "name": "Pin_10",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -10.16,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "11",
+          "name": "Pin_11",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -12.7,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "12",
+          "name": "Pin_12",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -15.24,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "13",
+          "name": "Pin_13",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 12.7,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "14",
+          "name": "Pin_14",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 10.16,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "15",
+          "name": "Pin_15",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 7.62,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "16",
+          "name": "Pin_16",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 5.08,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "17",
+          "name": "Pin_17",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 2.54,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "18",
+          "name": "Pin_18",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 0.0,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "19",
+          "name": "Pin_19",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -2.54,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "20",
+          "name": "Pin_20",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -5.08,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "21",
+          "name": "Pin_21",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -7.62,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "22",
+          "name": "Pin_22",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -10.16,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "23",
+          "name": "Pin_23",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -12.7,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "24",
+          "name": "Pin_24",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -15.24,
+          "length": 3.81,
+          "orientation": 180.0
+        }
+      ]
+    },
+    "J3": {
+      "symbol": "Connector:Screw_Terminal_01x02",
+      "ref": "J3",
+      "value": "SHIELD",
+      "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal",
+      "datasheet": "~",
+      "description": "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)",
+      "properties": {
+        "ki_fp_filters": "TerminalBlock*:*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "TerminalBlock*:*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "Pin_1",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 0.0,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "2",
+          "name": "Pin_2",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -2.54,
+          "length": 3.81,
+          "orientation": 0.0
+        }
+      ]
+    },
+    "U1": {
+      "symbol": "Connector_Generic:Conn_02x18_Odd_Even",
+      "ref": "U1",
+      "value": "Heltec_WiFi_Kit_32_V2",
+      "footprint": "AR488_custom:Heltec_WiFi_Kit_32_V2",
+      "datasheet": "~",
+      "description": "Generic connector, double row, 02x18, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)",
+      "properties": {
+        "ki_fp_filters": "Connector*:*_2x??_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "Connector*:*_2x??_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "Pin_1",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 20.32,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "2",
+          "name": "Pin_2",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 20.32,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "3",
+          "name": "Pin_3",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 17.78,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "4",
+          "name": "Pin_4",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 17.78,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "5",
+          "name": "Pin_5",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 15.24,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "6",
+          "name": "Pin_6",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 15.24,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "7",
+          "name": "Pin_7",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 12.7,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "8",
+          "name": "Pin_8",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 12.7,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "9",
+          "name": "Pin_9",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 10.16,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "10",
+          "name": "Pin_10",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 10.16,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "11",
+          "name": "Pin_11",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 7.62,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "12",
+          "name": "Pin_12",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 7.62,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "13",
+          "name": "Pin_13",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 5.08,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "14",
+          "name": "Pin_14",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 5.08,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "15",
+          "name": "Pin_15",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 2.54,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "16",
+          "name": "Pin_16",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 2.54,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "17",
+          "name": "Pin_17",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": 0.0,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "18",
+          "name": "Pin_18",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 0.0,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "19",
+          "name": "Pin_19",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -2.54,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "20",
+          "name": "Pin_20",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -2.54,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "21",
+          "name": "Pin_21",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -5.08,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "22",
+          "name": "Pin_22",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -5.08,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "23",
+          "name": "Pin_23",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -7.62,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "24",
+          "name": "Pin_24",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -7.62,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "25",
+          "name": "Pin_25",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -10.16,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "26",
+          "name": "Pin_26",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -10.16,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "27",
+          "name": "Pin_27",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -12.7,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "28",
+          "name": "Pin_28",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -12.7,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "29",
+          "name": "Pin_29",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -15.24,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "30",
+          "name": "Pin_30",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -15.24,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "31",
+          "name": "Pin_31",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -17.78,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "32",
+          "name": "Pin_32",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -17.78,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "33",
+          "name": "Pin_33",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -20.32,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "34",
+          "name": "Pin_34",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -20.32,
+          "length": 3.81,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "35",
+          "name": "Pin_35",
+          "func": "passive",
+          "unit": 1,
+          "x": -5.08,
+          "y": -22.86,
+          "length": 3.81,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "36",
+          "name": "Pin_36",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -22.86,
+          "length": 3.81,
+          "orientation": 180.0
+        }
+      ]
+    },
+    "U2": {
+      "symbol": "Interface:SN75160BDW",
+      "ref": "U2",
+      "value": "SN75160BDW",
+      "footprint": "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm",
+      "datasheet": "http://www.ti.com/lit/ds/symlink/sn75160b.pdf",
+      "description": "Octal general-purpose interface bus transceiver, SOIC-20",
+      "properties": {
+        "ki_fp_filters": "SOIC*7.5x12.8mm*P1.27mm*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "SOIC*7.5x12.8mm*P1.27mm*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "TE",
+          "func": "input",
+          "unit": 1,
+          "x": -10.16,
+          "y": -10.16,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "2",
+          "name": "B1",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 10.16,
+          "y": 12.7,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "3",
+          "name": "B2",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 10.16,
+          "y": 10.16,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "4",
+          "name": "B3",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 10.16,
+          "y": 7.62,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "5",
+          "name": "B4",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 10.16,
+          "y": 5.08,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "6",
+          "name": "B5",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 10.16,
+          "y": 2.54,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "7",
+          "name": "B6",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 10.16,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "8",
+          "name": "B7",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 10.16,
+          "y": -2.54,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "9",
+          "name": "B8",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 10.16,
+          "y": -5.08,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "10",
+          "name": "GND",
+          "func": "power_in",
+          "unit": 1,
+          "x": 0.0,
+          "y": -17.78,
+          "length": 2.54,
+          "orientation": 90.0
+        },
+        {
+          "pin_id": "11",
+          "name": "~{PE}",
+          "func": "input",
+          "unit": 1,
+          "x": -10.16,
+          "y": -12.7,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "12",
+          "name": "D8",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -10.16,
+          "y": -5.08,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "13",
+          "name": "D7",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -10.16,
+          "y": -2.54,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "14",
+          "name": "D6",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -10.16,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "15",
+          "name": "D5",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -10.16,
+          "y": 2.54,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "16",
+          "name": "D4",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -10.16,
+          "y": 5.08,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "17",
+          "name": "D3",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -10.16,
+          "y": 7.62,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "18",
+          "name": "D2",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -10.16,
+          "y": 10.16,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "19",
+          "name": "D1",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -10.16,
+          "y": 12.7,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "20",
+          "name": "VCC",
+          "func": "power_in",
+          "unit": 1,
+          "x": 0.0,
+          "y": 17.78,
+          "length": 2.54,
+          "orientation": 270.0
+        }
+      ]
+    },
+    "U3": {
+      "symbol": "AR488_custom:SN75161BN",
+      "ref": "U3",
+      "value": "SN75161BN",
+      "footprint": "Package_DIP:DIP-20_W7.62mm",
+      "datasheet": "https://www.ti.com/lit/ds/symlink/sn75161b.pdf",
+      "description": "GPIB control bus transceiver (ATN, DAV, NRFD, NDAC, IFC, SRQ, REN, EOI), DIP-20",
+      "properties": {
+        "ki_fp_filters": "DIP*W7.62mm*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "DIP*W7.62mm*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "TE",
+          "func": "input",
+          "unit": 1,
+          "x": -12.7,
+          "y": 17.78,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "2",
+          "name": "REN_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": 10.16,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "3",
+          "name": "IFC_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": 7.62,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "4",
+          "name": "NDAC_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": 5.08,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "5",
+          "name": "NRFD_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": 2.54,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "6",
+          "name": "DAV_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "7",
+          "name": "EOI_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": -2.54,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "8",
+          "name": "ATN_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": -5.08,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "9",
+          "name": "SRQ_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": -7.62,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "10",
+          "name": "GND",
+          "func": "power_in",
+          "unit": 1,
+          "x": 0.0,
+          "y": -22.86,
+          "length": 2.54,
+          "orientation": 90.0
+        },
+        {
+          "pin_id": "11",
+          "name": "DC",
+          "func": "input",
+          "unit": 1,
+          "x": -12.7,
+          "y": 15.24,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "12",
+          "name": "SRQ_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": -7.62,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "13",
+          "name": "ATN_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": -5.08,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "14",
+          "name": "EOI_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": -2.54,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "15",
+          "name": "DAV_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "16",
+          "name": "NRFD_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": 2.54,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "17",
+          "name": "NDAC_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": 5.08,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "18",
+          "name": "IFC_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": 7.62,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "19",
+          "name": "REN_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": 10.16,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "20",
+          "name": "VCC",
+          "func": "power_in",
+          "unit": 1,
+          "x": 0.0,
+          "y": 22.86,
+          "length": 2.54,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "VCC",
+          "name": "VCC",
+          "func": "power_in",
+          "unit": 1,
+          "x": 0.0,
+          "y": 22.86,
+          "length": 2.54,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "GND",
+          "name": "GND",
+          "func": "power_in",
+          "unit": 1,
+          "x": 0.0,
+          "y": -22.86,
+          "length": 2.54,
+          "orientation": 90.0
+        },
+        {
+          "pin_id": "TE",
+          "name": "TE",
+          "func": "input",
+          "unit": 1,
+          "x": -12.7,
+          "y": 17.78,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "DC",
+          "name": "DC",
+          "func": "input",
+          "unit": 1,
+          "x": -12.7,
+          "y": 15.24,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "DAV_T",
+          "name": "DAV_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "NRFD_T",
+          "name": "NRFD_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": 2.54,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "NDAC_T",
+          "name": "NDAC_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": 5.08,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "EOI_T",
+          "name": "EOI_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": -2.54,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "ATN_T",
+          "name": "ATN_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": -5.08,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "IFC_T",
+          "name": "IFC_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": 7.62,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "SRQ_T",
+          "name": "SRQ_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": -7.62,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "REN_T",
+          "name": "REN_T",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -12.7,
+          "y": 10.16,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "DAV_B",
+          "name": "DAV_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "NRFD_B",
+          "name": "NRFD_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": 2.54,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "NDAC_B",
+          "name": "NDAC_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": 5.08,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "EOI_B",
+          "name": "EOI_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": -2.54,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "ATN_B",
+          "name": "ATN_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": -5.08,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "IFC_B",
+          "name": "IFC_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": 7.62,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "SRQ_B",
+          "name": "SRQ_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": -7.62,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "REN_B",
+          "name": "REN_B",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 12.7,
+          "y": 10.16,
+          "length": 2.54,
+          "orientation": 180.0
+        }
+      ]
+    },
+    "U4": {
+      "symbol": "Interface_Expansion:MCP23017_SO",
+      "ref": "U4",
+      "value": "MCP23017",
+      "footprint": "Package_SO:SOIC-28W_7.5x17.9mm_P1.27mm",
+      "datasheet": "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP23017-Data-Sheet-DS20001952.pdf",
+      "description": "16-bit I/O expander, I2C, interrupts, w pull-ups, GPA/B7 output only (https://microchip.my.site.com/s/article/GPA7---GPB7-Cannot-Be-Used-as-Inputs-In-MCP23017),  SOIC-28",
+      "properties": {
+        "ki_fp_filters": "SOIC*7.5x17.9mm*P1.27mm*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "SOIC*7.5x17.9mm*P1.27mm*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "GPB0",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": 20.32,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "2",
+          "name": "GPB1",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": 17.78,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "3",
+          "name": "GPB2",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": 15.24,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "4",
+          "name": "GPB3",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": 12.7,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "5",
+          "name": "GPB4",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": 10.16,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "6",
+          "name": "GPB5",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": 7.62,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "7",
+          "name": "GPB6",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": 5.08,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "8",
+          "name": "GPB7",
+          "func": "output",
+          "unit": 1,
+          "x": 17.78,
+          "y": 2.54,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "9",
+          "name": "VDD",
+          "func": "power_in",
+          "unit": 1,
+          "x": 0.0,
+          "y": 27.94,
+          "length": 5.08,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "10",
+          "name": "VSS",
+          "func": "power_in",
+          "unit": 1,
+          "x": 0.0,
+          "y": -27.94,
+          "length": 5.08,
+          "orientation": 90.0
+        },
+        {
+          "pin_id": "11",
+          "name": "NC",
+          "func": "no_connect",
+          "unit": 1,
+          "x": -12.7,
+          "y": 15.24,
+          "length": 5.08,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "12",
+          "name": "SCK",
+          "func": "input",
+          "unit": 1,
+          "x": -17.78,
+          "y": 17.78,
+          "length": 5.08,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "13",
+          "name": "SDA",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": -17.78,
+          "y": 20.32,
+          "length": 5.08,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "14",
+          "name": "NC",
+          "func": "no_connect",
+          "unit": 1,
+          "x": -12.7,
+          "y": 12.7,
+          "length": 5.08,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "15",
+          "name": "A0",
+          "func": "input",
+          "unit": 1,
+          "x": -17.78,
+          "y": -20.32,
+          "length": 5.08,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "16",
+          "name": "A1",
+          "func": "input",
+          "unit": 1,
+          "x": -17.78,
+          "y": -17.78,
+          "length": 5.08,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "17",
+          "name": "A2",
+          "func": "input",
+          "unit": 1,
+          "x": -17.78,
+          "y": -15.24,
+          "length": 5.08,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "18",
+          "name": "~{RESET}",
+          "func": "input",
+          "unit": 1,
+          "x": -17.78,
+          "y": -2.54,
+          "length": 5.08,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "19",
+          "name": "INTB",
+          "func": "tri_state",
+          "unit": 1,
+          "x": -17.78,
+          "y": 5.08,
+          "length": 5.08,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "20",
+          "name": "INTA",
+          "func": "tri_state",
+          "unit": 1,
+          "x": -17.78,
+          "y": 2.54,
+          "length": 5.08,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "21",
+          "name": "GPA0",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": -2.54,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "22",
+          "name": "GPA1",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": -5.08,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "23",
+          "name": "GPA2",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": -7.62,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "24",
+          "name": "GPA3",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": -10.16,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "25",
+          "name": "GPA4",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": -12.7,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "26",
+          "name": "GPA5",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": -15.24,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "27",
+          "name": "GPA6",
+          "func": "bidirectional",
+          "unit": 1,
+          "x": 17.78,
+          "y": -17.78,
+          "length": 5.08,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "28",
+          "name": "GPA7",
+          "func": "output",
+          "unit": 1,
+          "x": 17.78,
+          "y": -20.32,
+          "length": 5.08,
+          "orientation": 180.0
+        }
+      ]
+    },
+    "J2": {
+      "symbol": "Connector:Barrel_Jack",
+      "ref": "J2",
+      "value": "DC_7-12V",
+      "footprint": "Connector_BarrelJack:BarrelJack_Horizontal",
+      "datasheet": "~",
+      "description": "DC Barrel Jack",
+      "properties": {
+        "ki_fp_filters": "BarrelJack*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "BarrelJack*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": 2.54,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "2",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 7.62,
+          "y": -2.54,
+          "length": 2.54,
+          "orientation": 180.0
+        }
+      ]
+    },
+    "Q1": {
+      "symbol": "AR488_custom:AO4407A",
+      "ref": "Q1",
+      "value": "AO4407A",
+      "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+      "datasheet": "https://www.aosmd.com/res/datasheets/AO4407A.pdf",
+      "description": "-12A Id, -30V Vds, P-Channel MOSFET, SOIC-8",
+      "properties": {
+        "ki_fp_filters": "SOIC*3.9x4.9mm*P1.27mm*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "SOIC*3.9x4.9mm*P1.27mm*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "S",
+          "func": "passive",
+          "unit": 1,
+          "x": 2.54,
+          "y": -5.08,
+          "length": 2.54,
+          "orientation": 90.0
+        },
+        {
+          "pin_id": "4",
+          "name": "G",
+          "func": "input",
+          "unit": 1,
+          "x": -5.08,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "5",
+          "name": "D",
+          "func": "passive",
+          "unit": 1,
+          "x": 2.54,
+          "y": 5.08,
+          "length": 2.54,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "S",
+          "name": "S",
+          "func": "passive",
+          "unit": 1,
+          "x": 2.54,
+          "y": -5.08,
+          "length": 2.54,
+          "orientation": 90.0
+        },
+        {
+          "pin_id": "G",
+          "name": "G",
+          "func": "input",
+          "unit": 1,
+          "x": -5.08,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "D",
+          "name": "D",
+          "func": "passive",
+          "unit": 1,
+          "x": 2.54,
+          "y": 5.08,
+          "length": 2.54,
+          "orientation": 270.0
+        }
+      ]
+    },
+    "R1": {
+      "symbol": "Device:R",
+      "ref": "R1",
+      "value": "100k",
+      "footprint": "Resistor_SMD:R_0603_1608Metric",
+      "datasheet": "~",
+      "description": "Resistor",
+      "properties": {
+        "ki_fp_filters": "R_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "R_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": 3.81,
+          "length": 1.27,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "2",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": -3.81,
+          "length": 1.27,
+          "orientation": 90.0
+        }
+      ]
+    },
+    "D1": {
+      "symbol": "Device:D_Zener",
+      "ref": "D1",
+      "value": "MM3Z8V2",
+      "footprint": "Diode_SMD:D_SOD-323",
+      "datasheet": "~",
+      "description": "Zener diode",
+      "properties": {
+        "ki_fp_filters": "TO-???* *_Diode_* *SingleDiode* D_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "TO-???* *_Diode_* *SingleDiode* D_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "K",
+          "func": "passive",
+          "unit": 1,
+          "x": -3.81,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 0.0
+        },
+        {
+          "pin_id": "2",
+          "name": "A",
+          "func": "passive",
+          "unit": 1,
+          "x": 3.81,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 180.0
+        }
+      ]
+    },
+    "U5": {
+      "symbol": "Regulator_Linear:AMS1117-5.0",
+      "ref": "U5",
+      "value": "AMS1117-5.0",
+      "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+      "datasheet": "http://www.advanced-monolithic.com/pdf/ds1117.pdf",
+      "description": "1A Low Dropout regulator, positive, 5.0V fixed output, SOT-223",
+      "properties": {
+        "ki_fp_filters": "SOT?223*TabPin2*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "SOT?223*TabPin2*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "GND",
+          "func": "power_in",
+          "unit": 1,
+          "x": 0.0,
+          "y": -7.62,
+          "length": 2.54,
+          "orientation": 90.0
+        },
+        {
+          "pin_id": "2",
+          "name": "VO",
+          "func": "power_out",
+          "unit": 1,
+          "x": 7.62,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 180.0
+        },
+        {
+          "pin_id": "3",
+          "name": "VI",
+          "func": "power_in",
+          "unit": 1,
+          "x": -7.62,
+          "y": 0.0,
+          "length": 2.54,
+          "orientation": 0.0
+        }
+      ]
+    },
+    "C1": {
+      "symbol": "Device:C",
+      "ref": "C1",
+      "value": "10u",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "datasheet": "~",
+      "description": "Unpolarized capacitor",
+      "properties": {
+        "ki_fp_filters": "C_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "C_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": 3.81,
+          "length": 2.794,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "2",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": -3.81,
+          "length": 2.794,
+          "orientation": 90.0
+        }
+      ]
+    },
+    "C2": {
+      "symbol": "Device:C",
+      "ref": "C2",
+      "value": "10u",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "datasheet": "~",
+      "description": "Unpolarized capacitor",
+      "properties": {
+        "ki_fp_filters": "C_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "C_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": 3.81,
+          "length": 2.794,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "2",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": -3.81,
+          "length": 2.794,
+          "orientation": 90.0
+        }
+      ]
+    },
+    "C3": {
+      "symbol": "Device:C",
+      "ref": "C3",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "datasheet": "~",
+      "description": "Unpolarized capacitor",
+      "properties": {
+        "ki_fp_filters": "C_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "C_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": 3.81,
+          "length": 2.794,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "2",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": -3.81,
+          "length": 2.794,
+          "orientation": 90.0
+        }
+      ]
+    },
+    "C4": {
+      "symbol": "Device:C",
+      "ref": "C4",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "datasheet": "~",
+      "description": "Unpolarized capacitor",
+      "properties": {
+        "ki_fp_filters": "C_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "C_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": 3.81,
+          "length": 2.794,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "2",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": -3.81,
+          "length": 2.794,
+          "orientation": 90.0
+        }
+      ]
+    },
+    "C5": {
+      "symbol": "Device:C",
+      "ref": "C5",
+      "value": "100n",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "datasheet": "~",
+      "description": "Unpolarized capacitor",
+      "properties": {
+        "ki_fp_filters": "C_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "C_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": 3.81,
+          "length": 2.794,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "2",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": -3.81,
+          "length": 2.794,
+          "orientation": 90.0
+        }
+      ]
+    },
+    "C6": {
+      "symbol": "Device:C",
+      "ref": "C6",
+      "value": "22u",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "datasheet": "~",
+      "description": "Unpolarized capacitor",
+      "properties": {
+        "ki_fp_filters": "C_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "C_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": 3.81,
+          "length": 2.794,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "2",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": -3.81,
+          "length": 2.794,
+          "orientation": 90.0
+        }
+      ]
+    },
+    "C7": {
+      "symbol": "Device:C",
+      "ref": "C7",
+      "value": "22u",
+      "footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "datasheet": "~",
+      "description": "Unpolarized capacitor",
+      "properties": {
+        "ki_fp_filters": "C_*"
+      },
+      "_extra_fields": {
+        "ki_fp_filters": "C_*"
+      },
+      "pins": [
+        {
+          "pin_id": "1",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": 3.81,
+          "length": 2.794,
+          "orientation": 270.0
+        },
+        {
+          "pin_id": "2",
+          "name": "~",
+          "func": "passive",
+          "unit": 1,
+          "x": 0.0,
+          "y": -3.81,
+          "length": 2.794,
+          "orientation": 90.0
+        }
+      ]
+    }
+  },
+  "nets": {
+    "DIO1_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "1",
+            "name": "Pin_1",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "2",
+            "name": "B1",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO2_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "2",
+            "name": "Pin_2",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "3",
+            "name": "B2",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO3_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "3",
+            "name": "Pin_3",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "4",
+            "name": "B3",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO4_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "4",
+            "name": "Pin_4",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "5",
+            "name": "B4",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "EOI_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "5",
+            "name": "Pin_5",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "7",
+            "name": "EOI_B",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "7",
+            "name": "EOI_B",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DAV_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "6",
+            "name": "Pin_6",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "6",
+            "name": "DAV_B",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "6",
+            "name": "DAV_B",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "NRFD_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "7",
+            "name": "Pin_7",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "5",
+            "name": "NRFD_B",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "5",
+            "name": "NRFD_B",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "NDAC_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "8",
+            "name": "Pin_8",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "4",
+            "name": "NDAC_B",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "4",
+            "name": "NDAC_B",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "IFC_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "9",
+            "name": "Pin_9",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "3",
+            "name": "IFC_B",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "3",
+            "name": "IFC_B",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "SRQ_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "10",
+            "name": "Pin_10",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "9",
+            "name": "SRQ_B",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "9",
+            "name": "SRQ_B",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "ATN_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "11",
+            "name": "Pin_11",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "8",
+            "name": "ATN_B",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "8",
+            "name": "ATN_B",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "SHIELD": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "12",
+            "name": "Pin_12",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "J3",
+          "pin": {
+            "number": "1",
+            "name": "Pin_1",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "J3",
+          "pin": {
+            "number": "2",
+            "name": "Pin_2",
+            "type": "passive"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO5_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "13",
+            "name": "Pin_13",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "6",
+            "name": "B5",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO6_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "14",
+            "name": "Pin_14",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "7",
+            "name": "B6",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO7_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "15",
+            "name": "Pin_15",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "8",
+            "name": "B7",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO8_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "16",
+            "name": "Pin_16",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "9",
+            "name": "B8",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "REN_B": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "17",
+            "name": "Pin_17",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "2",
+            "name": "REN_B",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "2",
+            "name": "REN_B",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "GND": {
+      "nodes": [
+        {
+          "component": "J1",
+          "pin": {
+            "number": "18",
+            "name": "Pin_18",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "J1",
+          "pin": {
+            "number": "19",
+            "name": "Pin_19",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "J1",
+          "pin": {
+            "number": "20",
+            "name": "Pin_20",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "J1",
+          "pin": {
+            "number": "21",
+            "name": "Pin_21",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "J1",
+          "pin": {
+            "number": "22",
+            "name": "Pin_22",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "J1",
+          "pin": {
+            "number": "23",
+            "name": "Pin_23",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "J1",
+          "pin": {
+            "number": "24",
+            "name": "Pin_24",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U1",
+          "pin": {
+            "number": "1",
+            "name": "Pin_1",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U1",
+          "pin": {
+            "number": "2",
+            "name": "Pin_2",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "10",
+            "name": "GND",
+            "type": "power_in"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "10",
+            "name": "GND",
+            "type": "power_in"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "10",
+            "name": "GND",
+            "type": "power_in"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "17",
+            "name": "A2",
+            "type": "input"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "16",
+            "name": "A1",
+            "type": "input"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "15",
+            "name": "A0",
+            "type": "input"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "10",
+            "name": "VSS",
+            "type": "power_in"
+          }
+        },
+        {
+          "component": "J2",
+          "pin": {
+            "number": "2",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "R1",
+          "pin": {
+            "number": "2",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U5",
+          "pin": {
+            "number": "1",
+            "name": "GND",
+            "type": "power_in"
+          }
+        },
+        {
+          "component": "C1",
+          "pin": {
+            "number": "2",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "C2",
+          "pin": {
+            "number": "2",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "C3",
+          "pin": {
+            "number": "2",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "C4",
+          "pin": {
+            "number": "2",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "C5",
+          "pin": {
+            "number": "2",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "C6",
+          "pin": {
+            "number": "2",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "C7",
+          "pin": {
+            "number": "2",
+            "name": "~",
+            "type": "passive"
+          }
+        }
+      ],
+      "is_power": true,
+      "power_symbol": "power:GND",
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "+3V3": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "3",
+            "name": "Pin_3",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "18",
+            "name": "~{RESET}",
+            "type": "input"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "9",
+            "name": "VDD",
+            "type": "power_in"
+          }
+        },
+        {
+          "component": "C5",
+          "pin": {
+            "number": "1",
+            "name": "~",
+            "type": "passive"
+          }
+        }
+      ],
+      "is_power": true,
+      "power_symbol": "power:+3V3",
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO1": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "9",
+            "name": "Pin_9",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "19",
+            "name": "D1",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO2": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "11",
+            "name": "Pin_11",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "18",
+            "name": "D2",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO3": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "13",
+            "name": "Pin_13",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "17",
+            "name": "D3",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO4": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "15",
+            "name": "Pin_15",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "16",
+            "name": "D4",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO5": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "17",
+            "name": "Pin_17",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "15",
+            "name": "D5",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO6": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "19",
+            "name": "Pin_19",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "14",
+            "name": "D6",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO7": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "21",
+            "name": "Pin_21",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "13",
+            "name": "D7",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DIO8": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "23",
+            "name": "Pin_23",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "12",
+            "name": "D8",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "+5V": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "4",
+            "name": "Pin_4",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "11",
+            "name": "~{PE}",
+            "type": "input"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "20",
+            "name": "VCC",
+            "type": "power_in"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "20",
+            "name": "VCC",
+            "type": "power_in"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "20",
+            "name": "VCC",
+            "type": "power_in"
+          }
+        },
+        {
+          "component": "U5",
+          "pin": {
+            "number": "2",
+            "name": "VO",
+            "type": "power_out"
+          }
+        },
+        {
+          "component": "C2",
+          "pin": {
+            "number": "1",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "C3",
+          "pin": {
+            "number": "1",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "C4",
+          "pin": {
+            "number": "1",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "C6",
+          "pin": {
+            "number": "1",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "C7",
+          "pin": {
+            "number": "1",
+            "name": "~",
+            "type": "passive"
+          }
+        }
+      ],
+      "is_power": true,
+      "power_symbol": "power:+5V",
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "TE_DATA": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "24",
+            "name": "Pin_24",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U2",
+          "pin": {
+            "number": "1",
+            "name": "TE",
+            "type": "input"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DAV": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "26",
+            "name": "Pin_26",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "15",
+            "name": "DAV_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "15",
+            "name": "DAV_T",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "NRFD": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "28",
+            "name": "Pin_28",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "16",
+            "name": "NRFD_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "16",
+            "name": "NRFD_T",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "NDAC": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "30",
+            "name": "Pin_30",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "17",
+            "name": "NDAC_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "17",
+            "name": "NDAC_T",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "EOI": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "32",
+            "name": "Pin_32",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "14",
+            "name": "EOI_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "14",
+            "name": "EOI_T",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "SCL": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "34",
+            "name": "Pin_34",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "12",
+            "name": "SCK",
+            "type": "input"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "SDA": {
+      "nodes": [
+        {
+          "component": "U1",
+          "pin": {
+            "number": "36",
+            "name": "Pin_36",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "13",
+            "name": "SDA",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "TE_CTRL": {
+      "nodes": [
+        {
+          "component": "U3",
+          "pin": {
+            "number": "1",
+            "name": "TE",
+            "type": "input"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "1",
+            "name": "TE",
+            "type": "input"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "25",
+            "name": "GPA4",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DC": {
+      "nodes": [
+        {
+          "component": "U3",
+          "pin": {
+            "number": "11",
+            "name": "DC",
+            "type": "input"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "11",
+            "name": "DC",
+            "type": "input"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "26",
+            "name": "GPA5",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "REN": {
+      "nodes": [
+        {
+          "component": "U3",
+          "pin": {
+            "number": "19",
+            "name": "REN_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "19",
+            "name": "REN_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "24",
+            "name": "GPA3",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "IFC": {
+      "nodes": [
+        {
+          "component": "U3",
+          "pin": {
+            "number": "18",
+            "name": "IFC_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "18",
+            "name": "IFC_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "22",
+            "name": "GPA1",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "ATN": {
+      "nodes": [
+        {
+          "component": "U3",
+          "pin": {
+            "number": "13",
+            "name": "ATN_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "13",
+            "name": "ATN_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "21",
+            "name": "GPA0",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "SRQ": {
+      "nodes": [
+        {
+          "component": "U3",
+          "pin": {
+            "number": "12",
+            "name": "SRQ_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U3",
+          "pin": {
+            "number": "12",
+            "name": "SRQ_T",
+            "type": "bidirectional"
+          }
+        },
+        {
+          "component": "U4",
+          "pin": {
+            "number": "23",
+            "name": "GPA2",
+            "type": "bidirectional"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "DC_7-12V": {
+      "nodes": [
+        {
+          "component": "J2",
+          "pin": {
+            "number": "1",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "Q1",
+          "pin": {
+            "number": "1",
+            "name": "S",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "Q1",
+          "pin": {
+            "number": "1",
+            "name": "S",
+            "type": "passive"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "Q1_GATE": {
+      "nodes": [
+        {
+          "component": "Q1",
+          "pin": {
+            "number": "4",
+            "name": "G",
+            "type": "input"
+          }
+        },
+        {
+          "component": "Q1",
+          "pin": {
+            "number": "4",
+            "name": "G",
+            "type": "input"
+          }
+        },
+        {
+          "component": "R1",
+          "pin": {
+            "number": "1",
+            "name": "~",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "D1",
+          "pin": {
+            "number": "2",
+            "name": "A",
+            "type": "passive"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    },
+    "LDO_IN": {
+      "nodes": [
+        {
+          "component": "Q1",
+          "pin": {
+            "number": "5",
+            "name": "D",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "Q1",
+          "pin": {
+            "number": "5",
+            "name": "D",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "D1",
+          "pin": {
+            "number": "1",
+            "name": "K",
+            "type": "passive"
+          }
+        },
+        {
+          "component": "U5",
+          "pin": {
+            "number": "3",
+            "name": "VI",
+            "type": "power_in"
+          }
+        },
+        {
+          "component": "C1",
+          "pin": {
+            "number": "1",
+            "name": "~",
+            "type": "passive"
+          }
+        }
+      ],
+      "is_power": false,
+      "power_symbol": null,
+      "trace_current": null,
+      "impedance": null,
+      "properties": {}
+    }
+  },
+  "subcircuits": [],
+  "annotations": [
+    {
+      "type": "TextBox",
+      "text": "AR-488 GPIB Interface for Tektronix TDS784A \u2014 ESP32 + SN75160/161 transceivers",
+      "position": [
+        184.0,
+        110.0
+      ],
+      "size": [
+        80.0,
+        30.0
+      ],
+      "margins": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "text_size": 1.2,
+      "bold": true,
+      "italic": false,
+      "text_color": "black",
+      "background": true,
+      "background_color": "lightyellow",
+      "border": true,
+      "border_width": 0.1,
+      "border_color": "black",
+      "justify": "center center",
+      "rotation": 0,
+      "uuid": "91b730c5-5856-4874-8f85-42b34e36ae01"
+    }
+  ]
+}
