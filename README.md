@@ -8,26 +8,14 @@ This project is inspired by the [AR-488](https://github.com/Twilight-Logic/AR488
 
 The schematic is written in Python using [circuit-synth](https://github.com/circuit-synth/circuit-synth), which generates KiCad 9/10 project files. The PCB layout is done in KiCad, assisted by AI through the IPC API.
 
-```
-circuit-synth/main.py          Python circuit description
-        |
-        v
-   circuit-synth                Generates .kicad_sch, .kicad_pro, netlist
-        |
-        v
-   KiCad schematic editor      Review, ERC
-        |
-        v
-   KiCad PCB editor             Import netlist, place components manually
-        |
-        v
-   FreeRouting                  Autoroute bulk signals
-        |
-        v
-   AI via IPC API (MCP server)  Refine routing, ground plane, DRC review
-        |
-        v
-   Final review + Gerbers       Manufacturing files
+```mermaid
+flowchart TD
+    A["circuit-synth/main.py\nPython circuit description"] --> B["circuit-synth\nGenerates .kicad_sch, .kicad_pro, netlist"]
+    B --> C["KiCad schematic editor\nReview, ERC"]
+    C --> D["KiCad PCB editor\nImport netlist, place components manually"]
+    D --> E["FreeRouting\nAutoroute bulk signals"]
+    E --> F["AI via IPC API (MCP server)\nRefine routing, ground plane, DRC review"]
+    F --> G["Final review + Gerbers\nManufacturing files"]
 ```
 
 ### Generating the schematic
@@ -129,30 +117,26 @@ The PCB layout is refined using Claude via KiCad's IPC API and the Model Context
 
 ### Block diagram
 
-```
-                          +------------------+
-  7-12V DC ---[ Q1 AO4407A ]---[ U5 AMS1117-5.0 ]--- 5V
-  Barrel Jack    P-FET RPP         LDO              |
-                   |                                 |
-                   +-- D1 MM3Z8V2 (gate clamp)       |
-                                                     |
-              +--------------------------------------+--------+
-              |                  |                    |        |
-         [ U2 SN75160BDW ]  [ U3 SN75161BN ]  [ U4 MCP23017 ]
-          Data transceiver    Ctrl transceiver    I2C GPIO exp.
-          (SOIC-20, 5V)      (DIP-20, 5V)       (SOIC-28, 3.3V)
-              |                  |                    |
-              |     +------------+--------------------+
-              |     |                                 |
-         [ U1 Heltec WiFi Kit 32 V2 (ESP32) ]   I2C bus
-              |                  |              SDA/SCL
-         DIO1-8 (8)        DAV,NRFD,NDAC,EOI (4)
-         TE_data (1)       via direct GPIO
-              |                  |
-              v                  v
-         [ J1 Centronics 24-pin GPIB connector ]
-              |
-         [ J3 Shield screw terminal ]
+```mermaid
+flowchart TD
+    PSU["7-12V DC\nBarrel Jack J2"] --> Q1["Q1 AO4407A\nP-FET RPP"]
+    Q1 --> U5["U5 AMS1117-5.0\nLDO → 5V"]
+    Q1 -.- D1["D1 MM3Z8V2\ngate clamp"]
+
+    U5 --> V5[ ]:::hidden
+    V5 --> U2["U2 SN75160BDW\nData transceiver\nSOIC-20, 5V"]
+    V5 --> U3["U3 SN75161BN\nCtrl transceiver\nDIP-20, 5V"]
+    V5 --> U4["U4 MCP23017\nI2C GPIO exp.\nSOIC-28, 3.3V"]
+
+    U2 -- "DIO1-8 (8)\nTE_data (1)" --> U1["U1 Heltec WiFi Kit 32 V2\nESP32"]
+    U3 -- "DAV, NRFD, NDAC, EOI (4)\ndirect GPIO" --> U1
+    U4 -- "I2C bus\nSDA/SCL" --> U1
+
+    U2 --> J1["J1 Centronics 24-pin\nGPIB connector"]
+    U3 --> J1
+    J1 --> J3["J3 Shield\nscrew terminal"]
+
+    classDef hidden display:none;
 ```
 
 ### GPIB bus transceivers
