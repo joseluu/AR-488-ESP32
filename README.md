@@ -1,113 +1,226 @@
 # AR-488-ESP32
 
-A circuit-synth project for PCB design with Python.
+GPIB/IEEE-488 interface board for the **Tektronix TDS784A** oscilloscope, based on an ESP32 (Heltec WiFi Kit 32 V2) with GPIB bus transceivers. The board plugs directly onto the instrument's Centronics 24-pin GPIB connector.
 
-## 🚀 Quick Start
+This project is inspired by the [AR-488](https://github.com/Twilight-Logic/AR488) Arduino GPIB adapter, redesigned around the ESP32 for WiFi capability and higher throughput.
+
+## Design workflow
+
+The schematic is written in Python using [circuit-synth](https://github.com/circuit-synth/circuit-synth), which generates KiCad 9/10 project files. The PCB layout is done in KiCad, assisted by AI through the IPC API.
+
+```
+circuit-synth/main.py          Python circuit description
+        |
+        v
+   circuit-synth                Generates .kicad_sch, .kicad_pro, netlist
+        |
+        v
+   KiCad schematic editor      Review, ERC
+        |
+        v
+   KiCad PCB editor             Import netlist, place components manually
+        |
+        v
+   FreeRouting                  Autoroute bulk signals
+        |
+        v
+   AI via IPC API (MCP server)  Refine routing, ground plane, DRC review
+        |
+        v
+   Final review + Gerbers       Manufacturing files
+```
+
+### Generating the schematic
 
 ```bash
-# Run your circuit
+export KICAD_SYMBOL_DIR="C:/Program Files/KiCad/9.0/share/kicad/symbols;$(pwd)/libs"
+export PYTHONIOENCODING=utf-8
 uv run python circuit-synth/main.py
 ```
 
-This will generate KiCad project files that you can open in KiCad.
+The generated KiCad project is in `AR488_ESP32/`.
 
-## 📁 Included Circuits (1)
+## Development environment setup
 
-This project includes the following circuit templates:
+### Prerequisites
 
-1. **Resistor Divider** (Beginner ⭐): 5V → 3.3V logic level shifter
-   - File: `circuit-synth/main.py`
+- **OS:** Windows 11 under **Git Bash** (Unix shell syntax throughout)
+- **Python:** 3.12 via [uv](https://github.com/astral-sh/uv)
+- **KiCad:** 9.0 (or 10.0 — the IPC API is the same)
+- **FreeRouting:** installed as KiCad plugin or [standalone](https://github.com/freerouting/freerouting)
 
+### Installing circuit-synth
 
-You can run any circuit file independently or use them as reference for your own designs.
+circuit-synth is included as a **git submodule** pointing to `joseluu/circuit-synth` on the `fix/windows-utf8-file-write` branch. This branch contains fixes for Windows UTF-8 encoding issues (emoji in logs, missing `encoding="utf-8"` on `write_text()` calls) that are not yet merged upstream.
 
-## 🏗️ Circuit-Synth Basics
+```bash
+# Clone with submodule
+git clone --recurse-submodules <this-repo-url>
+cd AR-488-ESP32
 
-### Creating Components
+# Or if already cloned without submodules
+git submodule update --init
 
-```python
-from circuit_synth import Component, Net, circuit
-
-# Create a resistor
-resistor = Component(
-    symbol="Device:R",           # KiCad symbol
-    ref="R",                     # Reference prefix
-    value="10k",                 # Component value
-    footprint="Resistor_SMD:R_0603_1608Metric"
-)
+# Create the virtual environment and install circuit-synth in editable mode
+uv sync
 ```
 
-### Defining Nets and Connections
+The `pyproject.toml` references circuit-synth as a local editable dependency:
 
-```python
-# Create nets (electrical connections)
-vcc = Net('VCC_3V3')
-gnd = Net('GND')
-
-# Connect component pins to nets
-resistor[1] += vcc   # Pin 1 to VCC
-resistor[2] += gnd   # Pin 2 to GND
+```toml
+[tool.uv.sources]
+circuit-synth = { path = "circuit-synth", editable = true }
 ```
 
-### Generating KiCad Projects
+If the upstream UTF-8 fixes are eventually merged into `circuit-synth/circuit-synth`, you can switch the submodule to track the official repo instead.
 
-```python
-@circuit(name="My_Circuit")
-def my_circuit():
-    # Your circuit code here
-    pass
+### Custom KiCad libraries
 
-if __name__ == '__main__':
-    circuit_obj = my_circuit()
-    circuit_obj.generate_kicad_project(
-        project_name="my_project",
-        generate_pcb=True
-    )
+The `libs/` directory contains project-specific symbols and footprints:
+
+- `AR488_custom.kicad_sym` — SN75161BN (not in KiCad standard library), AO4407A P-FET
+- `AR488_custom.pretty/Centronics_24_GPIB.kicad_mod` — Centronics 24-pin plug (2x12, 2.159mm pitch, 4.45mm row spacing, top-bottom pin numbering)
+- `AR488_custom.pretty/Heltec_WiFi_Kit_32_V2.kicad_mod` — ESP32 module header (2x18, 22.86mm row spacing)
+
+These are referenced via `KICAD_SYMBOL_DIR` at generation time (see above).
+
+## AI-assisted PCB routing (Option C)
+
+The PCB layout is refined using Claude via KiCad's IPC API and the Model Context Protocol (MCP).
+
+### Setting up the MCP server
+
+1. **Enable IPC API in KiCad:** Preferences > Plugins > Enable IPC API Server
+
+2. **Install an MCP server** — for example [mixelpixx/KiCAD-MCP-Server](https://github.com/mixelpixx/KiCAD-MCP-Server):
+
+   ```bash
+   pip install kicad-mcp  # or clone and install from source
+   ```
+
+3. **Configure Claude Code** to use the MCP server. Add to your Claude Code MCP settings:
+
+   ```json
+   {
+     "mcpServers": {
+       "kicad": {
+         "command": "python",
+         "args": ["-m", "kicad_mcp"]
+       }
+     }
+   }
+   ```
+
+4. **Workflow:**
+   - Open the PCB in KiCad's PCB editor
+   - Place components manually (connector at board edge, decoupling caps near their ICs)
+   - Manually route critical traces (power rails, high-speed signals)
+   - Run FreeRouting to autoroute remaining signals
+   - Use Claude via MCP to review DRC, optimize trace widths, add ground plane, adjust silkscreen
+   - AI edits appear in real-time in the KiCad GUI
+
+### Current limitations
+
+- The IPC API only supports the **PCB editor** (pcbnew). There is no schematic API yet — that's why we generate `.kicad_sch` files directly with circuit-synth.
+- Headless mode (kicad-cli as IPC server) is planned but not yet implemented.
+- MCP servers are still maturing — expect some rough edges.
+
+## Electrical architecture
+
+### Block diagram
+
+```
+                          +------------------+
+  7-12V DC ---[ Q1 AO4407A ]---[ U5 AMS1117-5.0 ]--- 5V
+  Barrel Jack    P-FET RPP         LDO              |
+                   |                                 |
+                   +-- D1 MM3Z8V2 (gate clamp)       |
+                                                     |
+              +--------------------------------------+--------+
+              |                  |                    |        |
+         [ U2 SN75160BDW ]  [ U3 SN75161BN ]  [ U4 MCP23017 ]
+          Data transceiver    Ctrl transceiver    I2C GPIO exp.
+          (SOIC-20, 5V)      (DIP-20, 5V)       (SOIC-28, 3.3V)
+              |                  |                    |
+              |     +------------+--------------------+
+              |     |                                 |
+         [ U1 Heltec WiFi Kit 32 V2 (ESP32) ]   I2C bus
+              |                  |              SDA/SCL
+         DIO1-8 (8)        DAV,NRFD,NDAC,EOI (4)
+         TE_data (1)       via direct GPIO
+              |                  |
+              v                  v
+         [ J1 Centronics 24-pin GPIB connector ]
+              |
+         [ J3 Shield screw terminal ]
 ```
 
-### Manufacturing File Generation
+### GPIB bus transceivers
 
-All circuit templates automatically generate manufacturing files:
+The GPIB bus requires 5V signaling. Two TI transceivers handle the voltage translation:
 
-```python
-# After generate_kicad_project(), templates also generate:
+- **SN75160BDW** (U2) — 8-bit bidirectional data bus transceiver (DIO1-DIO8). The `~PE` pin is tied to VCC to disable 3-state mode. Direction is controlled by `TE_data` from ESP32 GPIO17.
 
-# 1. BOM (Bill of Materials) - CSV format for component ordering
-bom_result = circuit_obj.generate_bom(project_name="my_project")
+- **SN75161BN** (U3) — Control bus transceiver handling DAV, NRFD, NDAC, EOI, ATN, IFC, SRQ, REN. Direction is controlled by `TE_ctrl` and `DC`, both from the MCP23017.
 
-# 2. PDF Schematic - Documentation and review
-pdf_result = circuit_obj.generate_pdf_schematic(project_name="my_project")
+No level shifters are needed: ESP32 3.3V outputs exceed the SN7516x TTL input threshold (~1.5V VIH).
 
-# 3. Gerber Files - PCB manufacturing (JLCPCB, PCBWay, etc.)
-gerber_result = circuit_obj.generate_gerbers(project_name="my_project")
-```
+### External power with reverse polarity protection
 
-**Generated files:**
-- `my_project/my_project_bom.csv` - Component list with references and values
-- `my_project/my_project_schematic.pdf` - Printable schematic documentation
-- `my_project/gerbers/` - Complete Gerber package for PCB fabrication
+The board can be powered from a 7-12V barrel jack (J2) or from USB via the ESP32 module's 5V pin.
 
-## 📖 Documentation
+The barrel jack path uses an **AO4407A P-channel MOSFET** (Q1, SOIC-8) for reverse polarity protection:
+- Source connected to barrel jack V+
+- Drain connected to AMS1117-5.0 LDO input
+- Gate pulled to GND via 100k resistor (R1)
+- **D1 MM3Z8V2** Zener diode (SOD-323) clamps the gate-drain voltage for ESD/spike protection
 
-- Circuit-Synth: https://circuit-synth.readthedocs.io
-- KiCad: https://docs.kicad.org
+Normal operation: Vgs = 0 - Vin << 0, FET is ON with millivolt drop (~2.4mV at 200mA). Reverse polarity: Vgs >= 0, FET is OFF, circuit protected.
 
-## 🤖 AI-Powered Design with Claude Code
+The **AMS1117-5.0** (U5, SOT-223) regulates down to 5V. Capacitors: 10uF input (C1), 10uF output (C2), all 0603.
 
-This project includes specialized circuit design agents in `.claude/agents/`:
+### I2C GPIO expander — why and how
 
-- **circuit-architect**: Master circuit design coordinator
-- **circuit-synth**: Circuit code generation and KiCad integration
-- **simulation-expert**: SPICE simulation and validation
-- **component-guru**: Component sourcing and manufacturing optimization
+The Heltec WiFi Kit 32 V2 only exposes 16 bidirectional GPIOs (the OLED uses GPIO4/15/16). GPIB requires 18+ signals. The **MCP23017** (U4, SOIC-28) adds 16 GPIOs via I2C, of which 6 are used for slow management signals.
 
-Use natural language to design circuits with AI assistance!
+**Critical design choice:** The MCP23017 is powered at **3.3V**, not 5V. This is because the ESP32 I2C lines output 3.3V, and the MCP23017 at 5V requires VIH = 0.7 x 5V = 3.5V — which 3.3V cannot reliably meet. At 3.3V, the MCP23017's outputs still drive the SN75161B TTL inputs correctly (VIH ~ 1.5V).
 
-## 🚀 Next Steps
+I2C address: 0x20 (A0=A1=A2=GND). RESET tied to VCC.
 
-1. Open `circuit-synth/main.py` and review the base circuit
-2. Run the circuit to generate KiCad files
-3. Open the generated `.kicad_pro` file in KiCad
-4. Modify the circuit or create your own designs
+### Signal routing: fast path vs slow path
 
-**Happy circuit designing!** 🎛️
+The signal split between direct GPIOs and the MCP23017 is deliberate:
+
+| Path | Signals | Latency | Used during |
+|------|---------|---------|-------------|
+| **Direct GPIO** (fast) | DIO1-8, DAV, NRFD, NDAC, EOI, TE_data | ~0 ns | Every byte transfer |
+| **MCP23017 I2C** (slow) | ATN, IFC, SRQ, REN, TE_ctrl, DC | ~100 us | Bus mode changes only |
+
+**Timing-constrained signals (data + handshake) are never routed through the I2C expander.** The three-wire handshake (DAV/NRFD/NDAC) and data lines (DIO1-8) must respond within microseconds during transfers. ATN, IFC, SRQ, and REN only change during bus management operations (addressing, interface clear, service request) — millisecond-level latency is acceptable.
+
+This hybrid architecture allows the TDS784A's fast GPIB transfers (200-500 KB/s) to run at full speed while fitting within the ESP32's limited GPIO count.
+
+## Component summary
+
+| Ref | Component | Package | Description |
+|-----|-----------|---------|-------------|
+| U1 | Heltec WiFi Kit 32 V2 | 2x18 pin header | ESP32 MCU with OLED |
+| U2 | SN75160BDW | SOIC-20W | GPIB data bus transceiver |
+| U3 | SN75161BN | DIP-20 | GPIB control bus transceiver |
+| U4 | MCP23017 | SOIC-28 | I2C GPIO expander |
+| U5 | AMS1117-5.0 | SOT-223 | 5V LDO regulator |
+| Q1 | AO4407A | SOIC-8 | P-FET reverse polarity protection |
+| D1 | MM3Z8V2 | SOD-323 | 8.2V Zener gate clamp |
+| J1 | Centronics 24-pin | Custom | GPIB connector |
+| J2 | Barrel jack | Horizontal | 7-12V DC input |
+| J3 | Screw terminal 1x2 | Phoenix PT-1.5 5mm | Shield connection |
+| R1 | 100k | 0603 | Q1 gate pulldown |
+| C1 | 10uF | 0603 | LDO input cap |
+| C2 | 10uF | 0603 | LDO output cap |
+| C3,C4 | 100nF | 0603 | SN7516x decoupling |
+| C5 | 100nF | 0603 | MCP23017 decoupling |
+| C6,C7 | 22uF | 0603 | SN7516x bulk bypass |
+
+## License
+
+TBD

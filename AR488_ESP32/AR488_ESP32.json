@@ -1,7 +1,7 @@
 {
   "name": "AR488_ESP32",
   "description": "",
-  "tstamps": "/ar488_esp32-2361912281136/",
+  "tstamps": "/ar488_esp32-2305570998320/",
   "source_file": "AR488_ESP32.kicad_sch",
   "components": {
     "J1": {
