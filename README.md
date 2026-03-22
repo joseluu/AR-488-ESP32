@@ -80,24 +80,40 @@ The PCB layout is refined using Claude via KiCad's IPC API and the Model Context
 
 1. **Enable IPC API in KiCad:** Preferences > Plugins > Enable IPC API Server
 
-2. **Install an MCP server** — for example [mixelpixx/KiCAD-MCP-Server](https://github.com/mixelpixx/KiCAD-MCP-Server):
+2. **Install the MCP server** — we use [mixelpixx/KiCAD-MCP-Server](https://github.com/mixelpixx/KiCAD-MCP-Server) (Node.js + Python):
 
    ```bash
-   pip install kicad-mcp  # or clone and install from source
+   # Clone next to this project
+   cd ..
+   git clone https://github.com/mixelpixx/KiCAD-MCP-Server.git
+   cd KiCAD-MCP-Server
+
+   # Install Node.js dependencies and build
+   npm install          # also runs tsc via postinstall
+
+   # Install Python dependencies
+   pip install -r requirements.txt
    ```
 
-3. **Configure Claude Code** to use the MCP server. Add to your Claude Code MCP settings:
+   Requires **Node.js 18+** and **Python 3.10+**.
+
+3. **Configure Claude Code** to use the MCP server. Create a `.mcp.json` file in the **AR-488-ESP32 project directory**:
 
    ```json
    {
      "mcpServers": {
        "kicad": {
-         "command": "python",
-         "args": ["-m", "kicad_mcp"]
+         "command": "node",
+         "args": ["<path-to>/KiCAD-MCP-Server/dist/index.js"],
+         "env": {
+           "KICAD_PROJECT_DIR": "<path-to>/AR-488-ESP32/AR488_ESP32"
+         }
        }
      }
    }
    ```
+
+   Claude Code will detect this file automatically when launched from the project directory.
 
 4. **Workflow:**
    - Open the PCB in KiCad's PCB editor
