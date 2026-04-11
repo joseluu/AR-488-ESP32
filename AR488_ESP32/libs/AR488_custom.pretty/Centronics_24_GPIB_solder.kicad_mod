@@ -178,4 +178,9 @@
 	(fp_line (start 13.37 5.70) (end -13.37 5.70) (stroke (width 0.12) (type solid)) (layer "F.SilkS"))
 	(fp_line (start -13.37 5.70) (end -13.37 -1.50) (stroke (width 0.12) (type solid)) (layer "F.SilkS"))
 	(fp_line (start -13.37 -1.00) (end -12.37 -1.50) (stroke (width 0.12) (type solid)) (layer "F.SilkS"))
+	(model "${KIPRJMOD}/libs/AR488_custom.3dshapes/Centronics_24_GPIB_solder.wrl"
+		(offset (xyz 0 0 0))
+		(scale (xyz 400 400 400))
+		(rotate (xyz -90 0 180))
+	)
 )

@@ -1,0 +1,360 @@
+#VRML V2.0 utf8
+#
+# Centronics 24-pin GPIB connector, solder type
+# Based on physical connector photos
+# Footprint: 2x12 pins, 2.159mm pitch, 4.2mm row spacing
+# Mounting holes at +/-23.5mm, 47mm apart
+#
+# Coordinate convention (KiCad VRML):
+#   X = along pin rows (footprint X)
+#   Y = up from PCB surface
+#   Z = depth (footprint -Y direction, connector extends toward mating face)
+#
+# Origin at footprint origin (center of pin row 1, y=0)
+# All dimensions in mm (use scale 1/2.54 in footprint or adjust)
+# Using 1:1 mm scale — set footprint model scale to (1, 1, 1)
+
+# ============================================================
+# Blue plastic outer housing
+# 55mm long, 12mm tall above PCB, extends from z=-2 to z=-17
+# (mating face at z=-17, back near pins at z=-2)
+# ============================================================
+Transform {
+  translation 0 0.006 -0.0095
+  children [
+    Shape {
+      appearance DEF Blue Appearance {
+        material Material {
+          diffuseColor 0.15 0.35 0.95
+          specularColor 0.4 0.5 1.0
+          shininess 0.4
+          ambientIntensity 0.3
+        }
+      }
+      geometry Box {
+        size 0.055 0.012 0.015
+      }
+    }
+  ]
+}
+
+# Top shell wall (thinner, above shield area)
+Transform {
+  translation 0 0.0115 -0.0095
+  children [
+    Shape {
+      appearance USE Blue
+      geometry Box {
+        size 0.055 0.001 0.015
+      }
+    }
+  ]
+}
+
+# ============================================================
+# Metal shield insert (visible on top between blue walls)
+# Slightly recessed inside the blue housing
+# ============================================================
+Transform {
+  translation 0 0.0095 -0.0095
+  children [
+    Shape {
+      appearance DEF Metal Appearance {
+        material Material {
+          diffuseColor 0.75 0.75 0.75
+          specularColor 0.95 0.95 0.95
+          shininess 0.8
+        }
+      }
+      geometry Box {
+        size 0.048 0.002 0.012
+      }
+    }
+  ]
+}
+
+# Metal shield front face (mating face surround)
+Transform {
+  translation 0 0.005 -0.0165
+  children [
+    Shape {
+      appearance USE Metal
+      geometry Box {
+        size 0.050 0.010 0.001
+      }
+    }
+  ]
+}
+
+# ============================================================
+# Blue plastic mating face with pin receptacle area
+# The recessed area where pins make contact
+# ============================================================
+Transform {
+  translation 0 0.005 -0.0155
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.10 0.25 0.80
+          specularColor 0.3 0.4 0.9
+          shininess 0.3
+          ambientIntensity 0.25
+        }
+      }
+      geometry Box {
+        size 0.044 0.007 0.001
+      }
+    }
+  ]
+}
+
+# ============================================================
+# Left side wall (blue, with mounting ear)
+# ============================================================
+Transform {
+  translation -0.0265 0.006 -0.0095
+  children [
+    Shape {
+      appearance USE Blue
+      geometry Box {
+        size 0.004 0.012 0.015
+      }
+    }
+  ]
+}
+
+# Right side wall
+Transform {
+  translation 0.0265 0.006 -0.0095
+  children [
+    Shape {
+      appearance USE Blue
+      geometry Box {
+        size 0.004 0.012 0.015
+      }
+    }
+  ]
+}
+
+# ============================================================
+# Left mounting ear (extends beyond body)
+# Blue plastic tab with screw hole
+# ============================================================
+Transform {
+  translation -0.0235 0.004 -0.002
+  children [
+    Shape {
+      appearance USE Blue
+      geometry Box {
+        size 0.008 0.008 0.006
+      }
+    }
+  ]
+}
+
+# Right mounting ear
+Transform {
+  translation 0.0235 0.004 -0.002
+  children [
+    Shape {
+      appearance USE Blue
+      geometry Box {
+        size 0.008 0.008 0.006
+      }
+    }
+  ]
+}
+
+# ============================================================
+# Mounting screw posts (metal cylinders)
+# At +/-23.5mm from center, matching footprint mounting holes
+# ============================================================
+
+# Left mounting screw
+Transform {
+  translation -0.0235 0.006 -0.0021
+  rotation 1 0 0 1.5708
+  children [
+    Shape {
+      appearance USE Metal
+      geometry Cylinder {
+        radius 0.0015
+        height 0.003
+      }
+    }
+  ]
+}
+
+# Right mounting screw
+Transform {
+  translation 0.0235 0.006 -0.0021
+  rotation 1 0 0 1.5708
+  children [
+    Shape {
+      appearance USE Metal
+      geometry Cylinder {
+        radius 0.0015
+        height 0.003
+      }
+    }
+  ]
+}
+
+# ============================================================
+# Pins — Row 1 (pins 1-12) at footprint y=0 → model z=0
+# Solder tails go 3mm below PCB, then horizontal stub
+# ============================================================
+
+# Pin row 1 — 12 pins
+# Pin pitch 2.159mm, centered: first pin at x=-11.874
+
+# Row 1 pins (vertical parts below PCB)
+Transform {
+  translation -0.011874 -0.0015 0
+  children [
+    Shape {
+      appearance DEF Pin Appearance {
+        material Material {
+          diffuseColor 0.80 0.75 0.60
+          specularColor 0.9 0.85 0.7
+          shininess 0.7
+        }
+      }
+      geometry Box { size 0.0005 0.003 0.0005 }
+    }
+  ]
+}
+Transform {
+  translation -0.009715 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation -0.007556 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation -0.005397 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation -0.003239 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation -0.001080 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.001079 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.003239 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.005397 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.007556 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.009715 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.011874 -0.0015 0
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+
+# Row 1 pins — horizontal stubs (from PCB surface into connector body)
+Transform {
+  translation 0 0.0002 -0.001
+  children [
+    Shape {
+      appearance USE Pin
+      geometry Box { size 0.026 0.0004 0.002 }
+    }
+  ]
+}
+
+# ============================================================
+# Pins — Row 2 (pins 13-24) at footprint y=4.2mm → model z=-0.0042
+# ============================================================
+Transform {
+  translation -0.011874 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation -0.009715 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation -0.007556 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation -0.005397 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation -0.003239 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation -0.001080 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.001079 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.003239 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.005397 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.007556 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.009715 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+Transform {
+  translation 0.011874 -0.0015 -0.0042
+  children [ Shape { appearance USE Pin geometry Box { size 0.0005 0.003 0.0005 } } ]
+}
+
+# Row 2 pins — horizontal stubs
+Transform {
+  translation 0 0.0002 -0.0032
+  children [
+    Shape {
+      appearance USE Pin
+      geometry Box { size 0.026 0.0004 0.002 }
+    }
+  ]
+}
+
+# ============================================================
+# Bottom plate (back of connector, PCB contact surface)
+# ============================================================
+Transform {
+  translation 0 0 -0.0021
+  children [
+    Shape {
+      appearance USE Blue
+      geometry Box {
+        size 0.050 0.001 0.006
+      }
+    }
+  ]
+}
