@@ -238,4 +238,9 @@
 	(fp_line (start 23.86 44.68) (end -1.00 44.68) (stroke (width 0.12) (type solid)) (layer "F.SilkS"))
 	(fp_line (start -1.00 44.68) (end -1.00 -1.50) (stroke (width 0.12) (type solid)) (layer "F.SilkS"))
 	(fp_line (start -1.5 -1) (end -1 -1.5) (stroke (width 0.12) (type solid)) (layer "F.SilkS"))
+	(model "${KIPRJMOD}/libs/AR488_custom.3dshapes/Heltec_WiFi_Kit_32_V2.wrl"
+		(offset (xyz 0 0 0))
+		(scale (xyz 394 394 394))
+		(rotate (xyz -90 0 0))
+	)
 )

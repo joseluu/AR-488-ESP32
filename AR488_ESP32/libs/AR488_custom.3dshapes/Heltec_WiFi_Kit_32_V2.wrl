@@ -1,0 +1,348 @@
+#VRML V2.0 utf8
+#
+# Heltec WiFi Kit 32 V2 — ESP32 module with OLED
+# Board: 50.2mm x 25.5mm, white PCB
+# Pin headers: 2x18, 2.54mm pitch, 22.86mm row spacing
+# Stands 5mm above main PCB via pin headers
+#
+# Footprint origin at pin 1 (0,0)
+# Left row: x=0, y=0..43.18  Right row: x=22.86, y=0..43.18
+# Board center: x=11.43, y=21.59
+# Board extends: x from -1.32 to 24.18 (25.5mm), y from -3.51 to 46.69 (50.2mm)
+#
+# VRML coords (meters): X=footprint X, Y=up, Z=footprint Y
+
+# ============================================================
+# Pin headers — black plastic housings (2mm tall, on bottom of module PCB)
+# Sitting on main PCB, raising the module 5mm
+# ============================================================
+
+# Left header strip (18 pins)
+Transform {
+  translation 0 0.004 0.02159
+  children [
+    Shape {
+      appearance DEF BlackPlastic Appearance {
+        material Material {
+          diffuseColor 0.1 0.1 0.1
+          specularColor 0.2 0.2 0.2
+          shininess 0.3
+        }
+      }
+      geometry Box {
+        size 0.0025 0.0025 0.04572
+      }
+    }
+  ]
+}
+
+# Right header strip (18 pins)
+Transform {
+  translation 0.02286 0.004 0.02159
+  children [
+    Shape {
+      appearance USE BlackPlastic
+      geometry Box {
+        size 0.0025 0.0025 0.04572
+      }
+    }
+  ]
+}
+
+# ============================================================
+# Header pins — gold colored, from main PCB through headers into module
+# Below header (through main PCB): 3mm
+# Through header plastic: 2.5mm
+# Into module PCB: 0.5mm stub
+# ============================================================
+
+# Left row pins (18 pins at x=0, z=0 to z=43.18mm)
+Transform {
+  translation 0 0.00125 0
+  children [
+    Shape {
+      appearance DEF GoldPin Appearance {
+        material Material {
+          diffuseColor 0.85 0.75 0.45
+          specularColor 0.95 0.9 0.6
+          shininess 0.8
+        }
+      }
+      geometry Box { size 0.0006 0.005 0.0006 }
+    }
+  ]
+}
+Transform {
+  translation 0 0.00125 0.00254
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.00508
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.00762
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.01016
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.01270
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.01524
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.01778
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.02032
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.02286
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.02540
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.02794
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.03048
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.03302
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.03556
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.03810
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.04064
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0 0.00125 0.04318
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+
+# Right row pins (18 pins at x=22.86mm)
+Transform {
+  translation 0.02286 0.00125 0
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.00254
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.00508
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.00762
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.01016
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.01270
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.01524
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.01778
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.02032
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.02286
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.02540
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.02794
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.03048
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.03302
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.03556
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.03810
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.04064
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+Transform {
+  translation 0.02286 0.00125 0.04318
+  children [ Shape { appearance USE GoldPin geometry Box { size 0.0006 0.005 0.0006 } } ]
+}
+
+# ============================================================
+# Module PCB — white, 50.2mm x 25.5mm x 1.6mm thick
+# Raised 5mm above main PCB (top of headers)
+# Board center at footprint (11.43, 21.59)
+# Board extends: x=-1.32 to 24.18, y=-3.51 to 46.69
+# ============================================================
+Transform {
+  translation 0.01143 0.00575 0.02159
+  children [
+    Shape {
+      appearance DEF WhitePCB Appearance {
+        material Material {
+          diffuseColor 0.92 0.92 0.90
+          specularColor 0.95 0.95 0.93
+          shininess 0.3
+          ambientIntensity 0.3
+        }
+      }
+      geometry Box {
+        size 0.0255 0.0016 0.0502
+      }
+    }
+  ]
+}
+
+# ============================================================
+# Components on top of module PCB
+# ============================================================
+
+# ESP32 metal shield can (silver, center-left area)
+Transform {
+  translation 0.01143 0.0074 0.014
+  children [
+    Shape {
+      appearance DEF MetalShield Appearance {
+        material Material {
+          diffuseColor 0.75 0.75 0.75
+          specularColor 0.9 0.9 0.9
+          shininess 0.8
+        }
+      }
+      geometry Box {
+        size 0.016 0.002 0.018
+      }
+    }
+  ]
+}
+
+# ============================================================
+# OLED display — dark rectangle on the right side of the board
+# Approximately 25mm x 13mm, 1mm thick
+# ============================================================
+Transform {
+  translation 0.01143 0.0074 0.038
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.05 0.05 0.08
+          specularColor 0.15 0.15 0.2
+          shininess 0.6
+        }
+      }
+      geometry Box {
+        size 0.023 0.001 0.013
+      }
+    }
+  ]
+}
+
+# OLED display glass/window (slightly lighter, on top)
+Transform {
+  translation 0.01143 0.008 0.0385
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.08 0.08 0.12
+          specularColor 0.3 0.3 0.35
+          shininess 0.9
+          transparency 0.3
+        }
+      }
+      geometry Box {
+        size 0.020 0.0005 0.010
+      }
+    }
+  ]
+}
+
+# ============================================================
+# USB Micro-B connector (left edge of board, silver)
+# ============================================================
+Transform {
+  translation 0.01143 0.0072 -0.0035
+  children [
+    Shape {
+      appearance USE MetalShield
+      geometry Box {
+        size 0.008 0.003 0.006
+      }
+    }
+  ]
+}
+
+# ============================================================
+# Text label: "Heltec Wifi Kit V2" on top of PCB
+# Using a thin dark box as simplified text indicator
+# (VRML Text node for actual text rendering)
+# ============================================================
+Transform {
+  translation 0.01143 0.0067 0.026
+  rotation 1 0 0 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.2 0.2 0.2
+        }
+      }
+      geometry Text {
+        string ["Heltec WiFi Kit V2"]
+        fontStyle FontStyle {
+          size 0.003
+          family "SANS"
+          justify "MIDDLE"
+        }
+      }
+    }
+  ]
+}
