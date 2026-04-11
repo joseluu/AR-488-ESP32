@@ -7650,6 +7650,18 @@
 		(layer "Edge.Cuts")
 		(uuid "9431a76b-6c0b-48a5-82c5-187fce796aa0")
 	)
+	(gr_text "AR-488 ESP32 by José Luu F1FGV 2026 V1.0"
+		(at 129.5 70.5 -0)
+		(layer "B.SilkS")
+		(uuid "c6e71135-c29f-49b2-a344-c4156fbca0cf")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+			(justify left bottom mirror)
+		)
+	)
 	(segment
 		(start 133.096 111.506)
 		(end 130.576 111.506)
