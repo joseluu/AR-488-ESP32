@@ -1,10 +1,11 @@
 {
   "mcpServers": {
     "kicad": {
-      "command": "node",
+      "command": "C:/Users/josel/.nvm/versions/node/v18.20.6/bin/node",
       "args": ["C:/Users/josel/hobby_w/CircuitSynthProjects/KiCAD-MCP-Server/dist/index.js"],
       "env": {
-        "KICAD_PROJECT_DIR": "C:/Users/josel/hobby_w/CircuitSynthProjects/AR-488-ESP32/AR488_ESP32"
+        "KICAD_PROJECT_DIR": "C:/Users/josel/hobby_w/CircuitSynthProjects/AR-488-ESP32/AR488_ESP32",
+        "KICAD_PYTHON": "C:/Program Files/KiCad/9.0/bin/python.exe"
       }
     }
   }

@@ -1,73 +1,73 @@
 # CLAUDE.md
 
-Project-specific guidance for Claude Code when working with this circuit-synth project.
+Project-specific guidance for Claude Code when working on the AR-488-ESP32 GPIB interface.
 
-## 🚀 Project Overview
+## Project Overview
 
-This is a **circuit-synth project** for PCB design with Python code.
+AR-488-ESP32 is a GPIB/IEEE-488 interface PCB for the Tektronix TDS784A oscilloscope. The schematic is written in Python using circuit-synth, generating KiCad 9 project files. PCB layout is done in KiCad with AI assistance via the MCP server.
 
-## 📝 Included Circuits (1)
+## Key Files
 
-This project includes the following circuit templates:
+- `circuit-synth/main.py` — Circuit description (Python, circuit-synth API)
+- `AR488_ESP32/` — Generated KiCad project (.kicad_sch, .kicad_pro, .kicad_pcb)
+- `AR488_ESP32/libs/` — Custom symbol and footprint libraries
+- `.mcp.json` — MCP server configuration for Claude Code
 
-1. **Resistor Divider** (Beginner ⭐)
-   - 5V → 3.3V logic level shifter
-   - File: `circuit-synth/main.py`
+## Schematic Generation
 
-You can modify these circuits or use them as reference for creating new designs.
-
-## ⚡ Available Tools & Commands
-
-### Slash Commands
-- `/find-symbol` - Search KiCad symbol libraries
-- `/find-footprint` - Search KiCad footprint libraries
-- `/find_stm32` - STM32-specific component search
-
-### Specialized Agents
-- **circuit-architect** - Master coordinator for complex projects
-- **circuit-synth** - Circuit code generation and KiCad integration
-- **simulation-expert** - SPICE simulation and validation
-- **component-guru** - Component sourcing and manufacturing
-
-## 🔧 Development Workflow
-
-1. **Component Selection**: Use `/find-symbol` and `/find-footprint` to find KiCad components
-2. **Circuit Design**: Write Python code using circuit-synth
-3. **Generate KiCad**: Run the Python file to create KiCad project
-4. **Manufacturing Files**: Templates automatically generate BOM, PDF, and Gerbers
-5. **Validate**: Open in KiCad and verify the design
-
-## 📚 Quick Reference
-
-### Component Creation
-```python
-component = Component(
-    symbol="Device:R",
-    ref="R",
-    value="10k",
-    footprint="Resistor_SMD:R_0603_1608Metric"
-)
+```bash
+# Required env vars for custom library resolution
+export KICAD_SYMBOL_DIR="C:/Program Files/KiCad/9.0/share/kicad/symbols;$(pwd)/AR488_ESP32/libs"
+export PYTHONIOENCODING=utf-8
+uv run python circuit-synth/main.py
 ```
 
-### Net Connections
+**Known issue:** Incremental sync fails with `PowerSymbolLabel has no attribute 'uuid'`. Fix: temporarily add `force_regenerate=True` to `generate_kicad_project()`, run, then remove it. Always remove before committing.
+
+**Post-processing:** The script patches the generated .kicad_sch with regex to set A4 paper size and title block (rev, date) — circuit-synth API doesn't expose these.
+
+## KiCad MCP Server (PCB editor)
+
+The MCP server (mixelpixx/KiCAD-MCP-Server) allows Claude to read and modify the PCB.
+
+### Backend behavior
+
+- **IPC backend** (read ops): `get_board_info`, `get_component_pads`, `get_nets_list` work in real-time via KiCad's IPC API
+- **SWIG backend** (write ops): `route_pad_to_pad`, `move_component`, etc. write to the .kicad_pcb file directly. The user must **File > Revert** in KiCad to see changes.
+- Check the `_backend` and `_realtime` fields in MCP responses to know which backend handled the call
+- Always call `open_project` with the .kicad_pcb path before using SWIG write operations
+
+### Useful MCP tools
+
+| Tool | Use for |
+|------|---------|
+| `get_board_info` | Check connection, backend, component/track counts |
+| `get_component_pads` | Get pad positions, nets, sizes for a component |
+| `get_nets_list` | List all nets with net codes |
+| `get_design_rules` | Check track width, clearance, via sizes |
+| `route_pad_to_pad` | Route a trace between two component pads |
+| `get_component_list` | List all components on the board |
+| `run_drc` | Run design rule check |
+| `move_component` | Move a component to new coordinates |
+
+### Workaround for unreliable SWIG writes
+
+If `route_pad_to_pad` reports success but the trace doesn't appear after revert, write the segment directly into the .kicad_pcb file:
+
 ```python
-vcc = Net("VCC_3V3")
-component[1] += vcc
+# Add a (segment ...) block before the last closing paren in the .kicad_pcb
+# Use pad positions from get_component_pads, net code from get_nets_list
 ```
 
-### Manufacturing Exports
-```python
-# All templates automatically generate manufacturing files:
-circuit_obj.generate_bom(project_name="my_project")          # BOM CSV
-circuit_obj.generate_pdf_schematic(project_name="my_project")  # PDF schematic
-circuit_obj.generate_gerbers(project_name="my_project")      # Gerber files
-```
+## Net Classes
 
-**Output:**
-- BOM: `my_project/my_project_bom.csv`
-- PDF: `my_project/my_project_schematic.pdf`
-- Gerbers: `my_project/gerbers/` (ready for JLCPCB, PCBWay, etc.)
+Power nets (`/DC_7-12V`, `/LDO_IN`, `GND`, `+5V`, `+3V3`) are assigned to the **Power** net class in the .kicad_pro file: 0.6mm track width (3x default), 0.3mm clearance, 0.8mm via diameter.
 
----
+## Versioning
 
-**This project is optimized for AI-powered circuit design with Claude Code!** 🎛️
+Bump the revision in `circuit-synth/main.py` (post-processing section) at each design change. Commit at each revision. Current: v0.4.
+
+## Slash Commands
+
+- `/find-symbol` — Search KiCad symbol libraries
+- `/find-footprint` — Search KiCad footprint libraries

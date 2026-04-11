@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "AR488_custom")(type "KiCad")(uri "${KIPRJMOD}/libs/AR488_custom.kicad_sym")(options "")(descr "AR-488-ESP32 custom symbols"))
+)

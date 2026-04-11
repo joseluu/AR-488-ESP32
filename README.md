@@ -88,46 +88,66 @@ The PCB layout is refined using Claude via KiCad's IPC API and the Model Context
    git clone https://github.com/mixelpixx/KiCAD-MCP-Server.git
    cd KiCAD-MCP-Server
 
-   # Install Node.js dependencies and build
+   # Install Node.js dependencies and build (requires Node.js 18+)
    npm install          # also runs tsc via postinstall
 
-   # Install Python dependencies
-   pip install -r requirements.txt
+   # Install Python dependencies into KiCad's bundled Python (NOT system Python)
+   # KiCad 9 ships its own Python 3.11 — the MCP server must use it because
+   # pcbnew.pyd is compiled for that specific interpreter.
+   "/c/Program Files/KiCad/9.0/bin/python.exe" -m pip install -r requirements.txt
    ```
 
-   Requires **Node.js 18+** and **Python 3.10+**.
+3. **Install the IPC backend** (optional but recommended for real-time UI sync):
 
-3. **Configure Claude Code** to use the MCP server. Create a `.mcp.json` file in the **AR-488-ESP32 project directory**:
+   ```bash
+   # Install kicad-python (provides kipy — Protocol Buffers + NNG transport)
+   "/c/Program Files/KiCad/9.0/bin/python.exe" -m pip install kicad-python
+   ```
+
+   The MCP server auto-detects the backend at startup:
+   - **IPC backend** (`kipy` installed + KiCad running with IPC enabled): real-time UI sync, read operations work live. Write operations (routing) currently fall back to SWIG.
+   - **SWIG backend** (fallback): reads/writes `.kicad_pcb` directly. Requires File > Revert in KiCad to see changes.
+
+   SWIG is deprecated in KiCad 9 and will be removed in KiCad 10. The IPC write path is under active development.
+
+4. **Configure Claude Code** — create a `.mcp.json` file in the **AR-488-ESP32 project directory** (already checked into the repo):
 
    ```json
    {
      "mcpServers": {
        "kicad": {
-         "command": "node",
+         "command": "<full-path-to-node>",
          "args": ["<path-to>/KiCAD-MCP-Server/dist/index.js"],
          "env": {
-           "KICAD_PROJECT_DIR": "<path-to>/AR-488-ESP32/AR488_ESP32"
+           "KICAD_PROJECT_DIR": "<path-to>/AR-488-ESP32/AR488_ESP32",
+           "KICAD_PYTHON": "C:/Program Files/KiCad/9.0/bin/python.exe"
          }
        }
      }
    }
    ```
 
-   Claude Code will detect this file automatically when launched from the project directory.
+   Key points:
+   - Use the **full path to node** (nvm-managed node isn't on PATH for spawned processes)
+   - `KICAD_PYTHON` tells the server to use KiCad's bundled Python (required for pcbnew access)
+   - Claude Code detects `.mcp.json` automatically when launched from the project directory
 
-4. **Workflow:**
+5. **Workflow:**
    - Open the PCB in KiCad's PCB editor
+   - Enable IPC API: Preferences > Plugins > Enable IPC API Server
    - Place components manually (connector at board edge, decoupling caps near their ICs)
    - Manually route critical traces (power rails, high-speed signals)
-   - Run FreeRouting to autoroute remaining signals
+   - Run FreeRouting to autoroute remaining signals (install via Plugin and Content Manager)
    - Use Claude via MCP to review DRC, optimize trace widths, add ground plane, adjust silkscreen
-   - AI edits appear in real-time in the KiCad GUI
+   - After SWIG writes: File > Revert to see changes in KiCad
 
 ### Current limitations
 
 - The IPC API only supports the **PCB editor** (pcbnew). There is no schematic API yet — that's why we generate `.kicad_sch` files directly with circuit-synth.
+- The mixelpixx MCP server uses IPC for read operations but falls back to SWIG for writes (routing, component placement). After SWIG writes, you must File > Revert in KiCad.
 - Headless mode (kicad-cli as IPC server) is planned but not yet implemented.
-- MCP servers are still maturing — expect some rough edges.
+- SWIG is deprecated in KiCad 9 and will be removed in KiCad 10 — plan to migrate to full IPC.
+- Alternative: [Finerestaurant/kicad-mcp-python](https://github.com/Finerestaurant/kicad-mcp-python) is IPC-only (no SWIG) but still v0.1.
 
 ## Electrical architecture
 
