@@ -67,6 +67,12 @@ Power nets (`/DC_7-12V`, `/LDO_IN`, `GND`, `+5V`, `+3V3`) are assigned to the **
 
 Bump the revision in `circuit-synth/main.py` (post-processing section) at each design change. Commit at each revision. Current: v0.4.
 
+## Custom 3D Models
+
+VRML (.wrl) models are in `AR488_ESP32/libs/AR488_custom.3dshapes/`. Models use meters internally (VRML standard). The footprint `(model ...)` entry needs a scale factor to convert to KiCad's mm. Empirically determined scale: **~394** (not 1000 as expected — likely due to KiCad's internal VRML import scaling). Apply the same scale to all three axes.
+
+Rotation `-90` on X axis is typically needed to align VRML Y-up with KiCad's coordinate system.
+
 ## Slash Commands
 
 - `/find-symbol` — Search KiCad symbol libraries
