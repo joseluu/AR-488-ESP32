@@ -4,6 +4,8 @@ GPIB/IEEE-488 interface board for the **Tektronix TDS784A** oscilloscope, based 
 
 This project is inspired by the [AR-488](https://github.com/Twilight-Logic/AR488) Arduino GPIB adapter, redesigned around the ESP32 for WiFi capability and higher throughput.
 
+![Assembled and bare PCBs](docs/board_photo.png)
+
 ## Design workflow
 
 The schematic is written in Python using [circuit-synth](https://github.com/circuit-synth/circuit-synth), which generates KiCad 9/10 project files. The PCB layout is done in KiCad, assisted by AI through the IPC API.

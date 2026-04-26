@@ -9,6 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# uv
+uv.lock
+
 # KiCad
 *-backups/
 *.lck
