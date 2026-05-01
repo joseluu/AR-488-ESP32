@@ -8,9 +8,9 @@ This project is inspired by the [AR-488](https://github.com/Twilight-Logic/AR488
 
 This is work in progress, however the PCB works, just requiring a slight modification to supply 3.3V instead of 5.0 V to the MCP chip.
 
-The ESP32 USB can power the whole board, if you use it this way, no need to populate the barrel jack connector power supply conditioning part (it has not been tested)
+The ESP32 USB can power the whole board, if you use it this way, no need to populate the barrel jack connector and power supply conditioning part (it has not been tested)
 
-See file [IMPROVEMENTS_V2.md](IMPROVEMENTS_V2.md) for further improvements
+See file [IMPROVEMENTS_V2.md](IMPROVEMENTS_V2.md) for further improvements (which I may not do)
 
 ## Design workflow
 
