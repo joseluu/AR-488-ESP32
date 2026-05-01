@@ -6167,7 +6167,7 @@
 			)
 		)
 		(property "Value" "SN75160BDW"
-			(at 0 -7.35 90)
+			(at -0.762 -11.377 90)
 			(layer "B.Fab")
 			(uuid "d5070ed2-914e-461a-9a9d-c839d8e8ba58")
 			(effects

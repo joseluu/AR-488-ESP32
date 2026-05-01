@@ -10,18 +10,18 @@ This is work in progress, however the PCB works, just requiring a slight modific
 
 The ESP32 USB can power the whole board, if you use it this way, no need to populate the barrel jack connector and power supply conditioning part (it has not been tested)
 
-See file [IMPROVEMENTS_V2.md](IMPROVEMENTS_V2.md) for further improvements (which I may not do)
+See file [IMPROVEMENTS_V2.md](IMPROVEMENTS_V2.md) for further improvements (which I may never implement myself)
 
-## Design workflow
+## Design workflow and caveats
 
-The PCB has been designed with circuit-synth and claude,.
+The PCB has been designed with circuit-synth and claude.
 
 Circuit-synth required a modification to work under Windows and git-bash (see my circuit-synth repo). Another circuit-synth
 anoyance is that circuit-synth used hierachical connectors on the same sheet, this was giving warnings in the kicad rules checker.
 
-When refreshing the circuit with circuitsynth, it uses a set of new internal identifiers
+When refreshing the circuit with circuitsynth, it uses a set of new internal identifiers, so when updating the PCB from the electrical schematic (F8) you must check the option "Re-link footprint ... from reference designators"
 
-See file AI_Assisted_design_workflow.md
+See file [AI_Assisted_design_workflow.md](AI_Assisted_design_workflow.md)
 
 ## Electrical architecture
 
@@ -156,4 +156,4 @@ options:
 
 ## License
 
-TBD
+MIT
