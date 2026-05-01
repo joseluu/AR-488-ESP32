@@ -27,9 +27,13 @@ When refreshing the circuit with circuitsynth, it uses a set of new internal ide
 
 See file [AI_Assisted_design_workflow.md](AI_Assisted_design_workflow.md)
 
-## Electrical architecture
+## Electrical architecture and implementation
 
 See file [Electrical_Architecture.md](Electrical_Architecture.md)
+
+The ESP32 board used is the Heltec Wifi Kit 32 (version 1), the V2 has the same pinout and can be used directly, however the V3 has different I2C pins and most likely will require adjustments to schematic and firmware.
+
+The exposed plated area around is meant for to solder a shield to limit radiated EMI in the lab. Not tested. Shielding completely will also shield the Wifi, so at this point this is a half baked idea.
 
 ## Firmware and Software
 
