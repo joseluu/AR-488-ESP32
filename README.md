@@ -10,7 +10,7 @@ This is work in progress, however the PCB works, requiring some modifications:
 * to supply 3.3V instead of 5.0 V to the MCP chip
 * add the I2C pullups
 * remove 3mm from the left side to fit directly behind the TDS784
-If you consider making it check the photos in the docs subdirectory.
+If you consider making it check the photos in the docs subdirectory. The gerber files I have used are in AR488_ESP32/Elecrow_manufacturing_v1.1.zip
 
 The ESP32 USB can power the whole board, if you use it this way, no need to populate the barrel jack connector and power supply conditioning part (it has not been tested)
 
