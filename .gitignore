@@ -20,3 +20,7 @@ uv.lock
 # Editor
 *.swp
 *~
+network_creds.h
+*.csv
+*screen.*
+_autosave*
