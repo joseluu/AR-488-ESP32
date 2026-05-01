@@ -1,0 +1,42 @@
+// GPIB worker — owns the GpibBus on Core 1.
+//
+// The AsyncTCP task (Core 0) parses incoming WebSocket frames and
+// enqueues a GpibRequest. This worker, pinned to Core 1, dequeues
+// each request, acquires the GpibBus mutex, runs the operation,
+// then sends a JSON response back through the WebSocket.
+
+#pragma once
+
+#include <Arduino.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
+
+class GpibBus;
+class Display;
+class AsyncWebSocket;
+
+struct GpibRequest {
+    uint32_t client_id;
+    uint8_t  addr;
+    char     request_id[32];
+    char     action[16];                        // "query" | "write" | "read"
+    char     command[256];
+    uint32_t timeout_ms;
+};
+
+class GpibWorker {
+public:
+    bool begin(GpibBus* bus, AsyncWebSocket* ws, Display* display, uint8_t scopeAddr);
+    bool submit(const GpibRequest& req, TickType_t wait = 0);
+
+private:
+    static void taskTrampoline(void* arg);
+    void run();
+    void handle(const GpibRequest& req);
+
+    GpibBus*         bus_     = nullptr;
+    AsyncWebSocket*  ws_      = nullptr;
+    Display*         display_ = nullptr;
+    uint8_t          scopeAddr_ = 1;
+    QueueHandle_t    queue_   = nullptr;
+};

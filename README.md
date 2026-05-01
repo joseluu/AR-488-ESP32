@@ -1,12 +1,16 @@
 # AR-488-ESP32
 
-GPIB/IEEE-488 interface board for the **Tektronix TDS784A** oscilloscope, based on an ESP32 (Heltec WiFi Kit 32 V2) with GPIB bus transceivers. The board plugs directly onto the instrument's Centronics 24-pin GPIB connector.
+GPIB/IEEE-488 interface board for the **Tektronix TDS784A** oscilloscope, based on an ESP32 (Heltec WiFi Kit 32) with GPIB bus transceivers. The board plugs directly onto the instrument's Centronics 24-pin GPIB connector.
 
 This project is inspired by the [AR-488](https://github.com/Twilight-Logic/AR488) Arduino GPIB adapter, redesigned around the ESP32 for WiFi capability and higher throughput.
 
-![Assembled and bare PCBs](docs/board_photo.png)
+![In use on a 784](docs/PCB_in_use.jpg)
 
-This is work in progress, however the PCB works, just requiring a slight modification to supply 3.3V instead of 5.0 V to the MCP chip.
+This is work in progress, however the PCB works, requiring some modifications:
+* to supply 3.3V instead of 5.0 V to the MCP chip
+* add the I2C pullups
+* remove 3mm from the left side to fit directly behind the TDS784
+If you consider making it check the photos in the docs subdirectory.
 
 The ESP32 USB can power the whole board, if you use it this way, no need to populate the barrel jack connector and power supply conditioning part (it has not been tested)
 
@@ -43,6 +47,13 @@ uv run --with websockets python firmware/test/send_gpib.py --waveform --points 5
 # getting a screen copy in .tif format
 uv run --with websockets python firmware/test/send_gpib.py 192.168.11.175 --hardcopy
 ```
+#### CSV example
+![CSV being used in LibreOfficeCalc](docs/CSV_rendering.png)
+#### Screen copy through GPIB and host software send_gpib.py
+![Screen copy through GPIB](docs/example_screen.png)
+#### Actual screen for comparison
+![Actual Screen](docs/Screen_Real.jpg)
+
 
 #### Host software help (-h)
 ```
