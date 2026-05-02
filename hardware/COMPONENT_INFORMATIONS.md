@@ -1,6 +1,76 @@
 # Technical Information — AR-488-ESP32 GPIB Interface
 
+## Heltec WiFi Kit 32 (ESP32) — Complete Pinout
+
+Board orientation: USB connector at bottom, OLED at top. 2x18 pin headers, 22.86mm row spacing.
+
+### Left Row (top to bottom)
+
+| Pos | Label | GPIO | Notes |
+|-----|-------|------|-------|
+| 1 | GND | -- | Power |
+| 2 | 5V | -- | **5V output from USB** |
+| 3 | 3V3 | -- | 3.3V output |
+| 4 | RST | -- | Reset |
+| 5 | 13 | GPIO13 | ADC2_4, Touch4 |
+| 6 | 12 | GPIO12 | ADC2_5, Touch5 — strapping pin (LOW at boot) |
+| 7 | 14 | GPIO14 | ADC2_6, Touch6 |
+| 8 | 27 | GPIO27 | ADC2_7, Touch7 |
+| 9 | 26 | GPIO26 | DAC2, ADC2_9 |
+| 10 | 25 | GPIO25 | DAC1, ADC2_8 — on-board LED |
+| 11 | 33 | GPIO33 | ADC1_5, Touch8 |
+| 12 | 32 | GPIO32 | ADC1_4, Touch9 |
+| 13 | 35 | GPIO35 | ADC1_7 — **input only** |
+| 14 | 34 | GPIO34 | ADC1_6 — **input only** |
+| 15 | 39 | GPIO39 | ADC1_3 — **input only** |
+| 16 | 38 | GPIO38 | ADC1_2 — **input only** |
+| 17 | 37 | GPIO37 | ADC1_1 — **input only** |
+| 18 | 36 | GPIO36 | ADC1_0 — **input only** |
+
+### Right Row (top to bottom)
+
+| Pos | Label | GPIO | Notes |
+|-----|-------|------|-------|
+| 1 | GND | -- | Power |
+| 2 | 5V | -- | **5V output from USB** |
+| 3 | 3V3 | -- | 3.3V output |
+| 4 | GND | -- | Power |
+| 5 | TX | GPIO1 | U0_TXD — serial programming |
+| 6 | RX | GPIO3 | U0_RXD — serial programming |
+| 7 | 15 | GPIO15 | **OLED_SCL (reserved)** |
+| 8 | 2 | GPIO2 | Strapping pin |
+| 9 | 0 | GPIO0 | **PROG button**, strapping |
+| 10 | 4 | GPIO4 | **OLED_SDA (reserved)** |
+| 11 | 16 | GPIO16 | **OLED_RST (reserved)** |
+| 12 | 17 | GPIO17 | U2_TXD |
+| 13 | 5 | GPIO5 | V_SPI_CS0 — strapping pin |
+| 14 | 18 | GPIO18 | V_SPI_CLK |
+| 15 | 23 | GPIO23 | V_SPI_MOSI |
+| 16 | 19 | GPIO19 | V_SPI_MISO |
+| 17 | 22 | GPIO22 | I2C SCL |
+| 18 | 21 | GPIO21 | I2C SDA, V_SPI_HD |
+
+### GPIO Classification
+
+**OLED reserved (3):** GPIO4 (SDA), GPIO15 (SCL), GPIO16 (RST)
+
+**Input-only (6):** GPIO34, GPIO35, GPIO36, GPIO37, GPIO38, GPIO39
+
+**Bidirectional, free for use (16):**
+GPIO2, GPIO5, GPIO12, GPIO13, GPIO14, GPIO17, GPIO18, GPIO19, GPIO21, GPIO22, GPIO23, GPIO25, GPIO26, GPIO27, GPIO32, GPIO33
+
+**Avoid:** GPIO0 (boot button), GPIO1 (TX), GPIO3 (RX), GPIO6-11 (internal flash)
+
+### Sources
+- Official pinout diagram: https://resource.heltec.cn/download/WiFi_Kit_32/WIFI%20Kit%2032_pinoutDiagram_V1.pdf
+- Heltec documentation: https://docs.heltec.org/en/node/esp32/wifi_kit_32/index.html
+- ESP32 GPIO reference: https://randomnerdtutorials.com/esp32-pinout-reference-gpios/
+
+---
+
 ## Heltec WiFi Kit 32 V2 (ESP32) — Complete Pinout
+
+Same ESP32-D0WDQ6 chip and 2x18 header layout as V1, but the V2 adds a **Vext** switchable 3.3V rail (controlled by GPIO21) and a battery voltage divider tied to GPIO13 (Power Detection). USB connector is still Micro-USB.
 
 Board orientation: USB connector at bottom, OLED at top. 2x18 pin headers, 22.86mm row spacing.
 
@@ -12,7 +82,7 @@ Board orientation: USB connector at bottom, OLED at top. 2x18 pin headers, 22.86
 | 2 | 3V3 | -- | 3.3V output |
 | 3 | Vext | -- | Switchable 3.3V (controlled by GPIO21) |
 | 4 | RST | -- | Reset |
-| 5 | 13 | GPIO13 | ADC2_4, Touch4 |
+| 5 | 13 | GPIO13 | ADC2_4, Touch4 — **also tied to battery voltage divider (Power Detection)** |
 | 6 | 12 | GPIO12 | ADC2_5, Touch5 — strapping pin (LOW at boot) |
 | 7 | 14 | GPIO14 | ADC2_6, Touch6 |
 | 8 | 27 | GPIO27 | ADC2_7, Touch7 |
@@ -39,7 +109,7 @@ Board orientation: USB connector at bottom, OLED at top. 2x18 pin headers, 22.86
 | 6 | RX | GPIO3 | U0_RXD — serial programming |
 | 7 | 15 | GPIO15 | **OLED_SCL (reserved)** |
 | 8 | 2 | GPIO2 | Strapping pin |
-| 9 | 0 | GPIO0 | **PROG button**, strapping |
+| 9 | 0 | GPIO0 | **PRG button**, strapping |
 | 10 | 4 | GPIO4 | **OLED_SDA (reserved)** |
 | 11 | 16 | GPIO16 | **OLED_RST (reserved)** |
 | 12 | 17 | GPIO17 | U2_TXD |
@@ -48,23 +118,115 @@ Board orientation: USB connector at bottom, OLED at top. 2x18 pin headers, 22.86
 | 15 | 23 | GPIO23 | V_SPI_MOSI |
 | 16 | 19 | GPIO19 | V_SPI_MISO |
 | 17 | 22 | GPIO22 | I2C SCL |
-| 18 | 21 | GPIO21 | I2C SDA — also Vext control |
+| 18 | 21 | GPIO21 | I2C SDA — **also Vext control** (drive HIGH to enable Vext rail) |
 
-### GPIO Classification
+### Differences vs V1
+
+- Vext switchable 3.3V rail added — left pos 3 and right pos 4 (V1 had `3V3` and `GND` there)
+- GPIO21 doubles as Vext enable (drive HIGH to power Vext) — careful when using as I2C SDA
+- GPIO13 has a battery voltage divider on it (Power Detection) — usable as GPIO but reads ~½·VBAT when battery is connected
+- USB chip changed from CP2102 to CP2104 in some revs (still Micro-USB)
+
+### GPIO Classification (same as V1)
 
 **OLED reserved (3):** GPIO4 (SDA), GPIO15 (SCL), GPIO16 (RST)
-
 **Input-only (6):** GPIO34, GPIO35, GPIO36, GPIO37, GPIO38, GPIO39
-
-**Bidirectional, free for use (16):**
-GPIO2, GPIO5, GPIO12, GPIO13, GPIO14, GPIO17, GPIO18, GPIO19, GPIO21, GPIO22, GPIO23, GPIO25, GPIO26, GPIO27, GPIO32, GPIO33
-
+**Bidirectional, free for use (16):** GPIO2, GPIO5, GPIO12, GPIO13, GPIO14, GPIO17, GPIO18, GPIO19, GPIO21, GPIO22, GPIO23, GPIO25, GPIO26, GPIO27, GPIO32, GPIO33
 **Avoid:** GPIO0 (boot button), GPIO1 (TX), GPIO3 (RX), GPIO6-11 (internal flash)
 
 ### Sources
 - Official pinout diagram: https://resource.heltec.cn/download/WiFi_Kit_32/WIFI_Kit_32_pinoutDiagram_V2.pdf
-- Heltec documentation: https://docs.heltec.org/en/node/esp32/wifi_kit_32/index.html
-- ESP32 GPIO reference: https://randomnerdtutorials.com/esp32-pinout-reference-gpios/
+- Heltec hardware update log: https://wiki.heltec.org/docs/devices/open-source-hardware/esp32-series/lora-32/wifi-kit-32/hardware_update_log
+
+---
+
+## Heltec WiFi Kit 32 V3 (ESP32-S3) — Complete Pinout
+
+**Major architectural change:** V3 uses **ESP32-S3FN8** (Xtensa LX7 dual-core, 8 MB flash) instead of the original ESP32. USB is now **Type-C** with native USB support on the S3 (CP2102 still present for serial). Different GPIO numbering — V1/V2 firmware will NOT run unmodified.
+
+Board orientation: USB connector at top, OLED below. 2x18 pin headers (Heltec calls them **J2** = left, **J3** = right), 2.54mm pitch.
+
+### Left Row — Header J2 (top to bottom)
+
+| Pos | Label | GPIO | Notes |
+|-----|-------|------|-------|
+| 1 | GND | -- | Power |
+| 2 | 5V | -- | **5V output from USB** (max 500 mA) |
+| 3 | Ve | -- | Vext switchable 3.3V (controlled by GPIO36, max 350 mA) |
+| 4 | Ve | -- | Vext switchable 3.3V (second pin) |
+| 5 | RX | GPIO44 | U0_RXD — connected to CP2102 TXD |
+| 6 | TX | GPIO43 | U0_TXD — connected to CP2102 RXD |
+| 7 | RST | -- | CHIP_PU (reset switch) |
+| 8 | 0 | GPIO0 | **PRG button**, strapping |
+| 9 | 21 | GPIO21 | **OLED_RST (reserved)** |
+| 10 | 20 | GPIO20 | U1_CTS, ADC2_CH9, CLK_OUT1, **USB_D+** (solder R29 to connect to USB socket) |
+| 11 | 19 | GPIO19 | U1_RTS, ADC2_CH8, CLK_OUT2, **USB_D−** (solder R3 to connect to USB socket) |
+| 12 | 7 | GPIO7 | ADC1_CH6, Touch7 |
+| 13 | 6 | GPIO6 | ADC1_CH5, Touch6 |
+| 14 | 5 | GPIO5 | ADC1_CH4, Touch5 |
+| 15 | 4 | GPIO4 | ADC1_CH3, Touch4 |
+| 16 | 3 | GPIO3 | ADC1_CH2, Touch3 |
+| 17 | 2 | GPIO2 | ADC1_CH1, Touch2 |
+| 18 | 1 | GPIO1 | ADC1_CH0, Touch1 — **also tied to VBAT divider** (V_BAT = (100+390)/100 · V_ADC) |
+
+### Right Row — Header J3 (top to bottom)
+
+| Pos | Label | GPIO | Notes |
+|-----|-------|------|-------|
+| 1 | GND | -- | Power |
+| 2 | 3V3 | -- | 3.3V output (max 500 mA) |
+| 3 | 3V3 | -- | 3.3V output |
+| 4 | 26 | GPIO26 | SPICS1 |
+| 5 | 48 | GPIO48 | SPICLK_N_DIFF, SUBSPICLK_N_DIFF |
+| 6 | 47 | GPIO47 | SPICLK_P_DIFF, SUBSPICLK_P_DIFF |
+| 7 | 33 | GPIO33 | SPIIO4, FSPIHD, SUBSPIHD |
+| 8 | 34 | GPIO34 | SPIIO5, FSPICS0, SUBSPICS0 |
+| 9 | 35 | GPIO35 | SPIIO6, FSPID, SUBSPID — **on-board LED control** |
+| 10 | 36 | GPIO36 | SPIIO7, FSPICLK, SUBSPICLK — **Vext enable (drive HIGH to power Vext)** |
+| 11 | 37 | GPIO37 | SPIDQS, FSPIQ, SUBSPIQ — **ADC_Ctrl (battery measurement enable)** |
+| 12 | 38 | GPIO38 | FSPIWP, SUBSPIWP |
+| 13 | 39 | GPIO39 | MTCK (JTAG) |
+| 14 | 40 | GPIO40 | MTDO (JTAG) |
+| 15 | 41 | GPIO41 | MTDI (JTAG) |
+| 16 | 42 | GPIO42 | MTMS (JTAG) |
+| 17 | 45 | GPIO45 | strapping pin (VDD_SPI voltage select) |
+| 18 | 46 | GPIO46 | strapping pin (boot mode) |
+
+### On-Board Peripherals (NOT broken out to headers)
+
+- **OLED I2C:** GPIO17 = OLED_SDA, GPIO18 = OLED_SCL (internal — do not reuse). OLED_RST = GPIO21 (this one IS on the header, J2 pos 9).
+- **CP2102 USB-serial:** GPIO43/44 (also broken out at J2 pos 5/6).
+
+### Differences vs V1/V2
+
+- **MCU:** ESP32-S3 (LX7, 8 MB flash, native USB) — different SDK requirements; firmware is not binary-compatible with V1/V2.
+- **USB:** Type-C (was Micro-USB).
+- **Deep sleep:** <10 µA (was ~800 µA on V2).
+- **No DAC** on ESP32-S3 (V1/V2 had DAC1/DAC2 on GPIO25/26).
+- **No "input-only" pins** on ESP32-S3 (all broken-out GPIOs are bidirectional).
+- **OLED I2C bus moved internal** — V1/V2 reserved GPIO4/GPIO15 (broken-out pins); V3 uses GPIO17/GPIO18 internally and frees the corresponding header positions for general use.
+- **LED moved** from GPIO25 (V1/V2) to GPIO35 (V3).
+- **Vext control moved** from GPIO21 (V2) to GPIO36 (V3); GPIO21 is now OLED_RST instead.
+- **Battery sense moved** from GPIO13 (V2) to GPIO1 (V3), gated by GPIO37 (ADC_Ctrl).
+- **Strapping pins:** GPIO0, GPIO45, GPIO46 (different from ESP32 strapping set).
+
+### GPIO Classification
+
+**OLED-reserved (internal, do not reuse):** GPIO17, GPIO18
+**OLED RST (header, reserved if using on-board OLED):** GPIO21
+**Programming UART (avoid for general use):** GPIO43 (TX), GPIO44 (RX)
+**Boot/strapping (use with care):** GPIO0, GPIO45, GPIO46
+**USB D+/D− (only connected to USB socket if R29/R3 soldered):** GPIO20, GPIO19
+**On-board LED:** GPIO35
+**Vext enable:** GPIO36
+**ADC enable for battery sense:** GPIO37
+**Battery voltage:** GPIO1 (still usable as GPIO/touch/ADC otherwise)
+**Free for general use (broken out):** GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7, GPIO19, GPIO20, GPIO26, GPIO33, GPIO34, GPIO38, GPIO39, GPIO40, GPIO41, GPIO42, GPIO47, GPIO48
+
+### Sources
+- Official datasheet (HTIT-WB32_V3 Rev 1.1): https://resource.heltec.cn/download/WiFi_Kit_32_V3/HTIT-WiFi%20kit32_V3(Rev1.1).pdf
+- Product page: https://heltec.org/project/wifi-kit32-v3/
+- ESP32-S3 datasheet: https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf
 
 ---
 
@@ -229,16 +391,16 @@ KiCad footprint: `Package_SO:SOIC-28W_7.5x17.9mm_P1.27mm`
 
 Instead of a Schottky diode (~300mV drop), use a P-channel MOSFET for near-zero dropout protection.
 
-**Selected part: AO4407A** (SOIC-8)
+**Selected part: AO3401A** (SOT-23)
 - Vds: -30V (plenty of margin for 12V input)
-- Rds(on): 12mΩ typ @ Vgs=-4.5V
-- Vgs(th): -1V to -3V
-- Vgs max: ±20V (no Zener clamp needed at 7-12V input)
-- Id: -12A continuous
-- Voltage drop @ 200mA: **~2.4mV** (vs ~300mV for Schottky)
-- Package: SOIC-8 (pins 1-3 = Source, pin 4 = Gate, pins 5-8 = Drain)
-- KiCad symbol: **custom required** (not in KiCad 9.0 standard library)
-- Datasheet: https://www.aosmd.com/res/datasheets/AO4407A.pdf
+- Rds(on): 60mΩ typ @ Vgs=-10V; ~75mΩ @ Vgs=-4.5V
+- Vgs(th): -0.4V to -1.1V (logic-level)
+- Vgs max: **±12V** — at 12V input this is right at the limit; add a Zener clamp (e.g. 10V) Gate↔Source if input may exceed 12V
+- Id: -4A continuous (limited by SOT-23 package thermals)
+- Voltage drop @ 200mA: **~15mV** (vs ~300mV for Schottky — still excellent)
+- Package: SOT-23 (pin 1 = Gate, pin 2 = Source, pin 3 = Drain)
+- KiCad symbol: **custom required** (not in KiCad 9.0 standard library — generic `Device:Q_PMOS_GSD` works as a stand-in)
+- Datasheet: https://www.aosmd.com/res/datasheets/AO3401A.pdf
 
 **Circuit:**
 - Source → barrel jack V+ (7-12V)
@@ -264,7 +426,7 @@ Instead of a Schottky diode (~300mV drop), use a P-channel MOSFET for near-zero 
 | Barrel Jack | `Connector:Barrel_Jack` | `Connector_BarrelJack:BarrelJack_Horizontal` | Yes |
 | 2x18 pin header | `Connector_Generic:Conn_02x18_Odd_Even` | custom (22.86mm spacing) | Symbol yes |
 | 2x12 connector | `Connector_Generic:Conn_02x12_Odd_Even` | custom (Centronics 24) | Symbol yes |
-| AO4407A (P-FET) | **Custom required** | `Package_SO:SOIC-8_3.9x4.9mm_P1.27mm` | No |
+| AO3401A (P-FET) | **Custom required** | `Package_TO_SOT_SMD:SOT-23` | No |
 | Cap 0805 | `Device:C` | `Capacitor_SMD:C_0805_2012Metric` | Yes |
 | Cap 0603 | `Device:C` | `Capacitor_SMD:C_0603_1608Metric` | Yes |
 | Resistor 0603 | `Device:R` | `Resistor_SMD:R_0603_1608Metric` | Yes |

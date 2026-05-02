@@ -7,9 +7,10 @@ This document tracks identified hardware risks and recommended revisions for the
 ## 0. Priority
 * add pull-ups to the I2C lines !
 * reduce board with by 5mm on the left side (the larger one) to fit behind the instrument
-* MCP supply must be 3.3V, AI made an error on the ESP32 pins
+
 
 ## 1. nice to have
+* MCP supply must be 3.3V, the current design is for a Heltec Wifi Kit 32 (V2) try to find a design compatible with other versions
 * map GPIO 5 to a test pin onboard
 * Add a ground testing pin
 * increase pin hole diameter by 0.1mm for the 488 connector pins
