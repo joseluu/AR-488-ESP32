@@ -1,0 +1,6 @@
+//
+// copy this file to network_creds.h
+// and substitute your AP ssid/password
+//
+const char* ssid = "your-ssid";
+const char* password = "your-password";

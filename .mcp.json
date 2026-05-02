@@ -7,6 +7,16 @@
         "KICAD_PROJECT_DIR": "C:/Users/josel/hobby_w/CircuitSynthProjects/AR-488-ESP32/AR488_ESP32",
         "KICAD_PYTHON": "C:/Program Files/KiCad/9.0/bin/python.exe"
       }
+    },
+    "tek-tds784a": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "mcp_server"],
+      "cwd": "C:/Users/josel/hobby_w/CircuitSynthProjects/AR-488-ESP32/host_software",
+      "env": {
+        "AR488_HOST": "192.168.11.175",
+        "AR488_ADDR": "1",
+        "AR488_TIMEOUT_MS": "2000"
+      }
     }
   }
 }

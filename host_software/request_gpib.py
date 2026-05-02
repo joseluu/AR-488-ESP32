@@ -81,9 +81,11 @@ from datetime import datetime
 
 import websockets
 
+# MCP-LIBRARY: imported by mcp_server. Do not change name or pattern.
 _FLOAT_RE = re.compile(r"[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?")
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change signature.
 def iso_stamp(dt: datetime) -> str:
     """Sortable ISO 8601 stamp safe for Windows filenames (':' replaced by '-')."""
     return dt.strftime("%Y-%m-%dT%H-%M-%S")
@@ -168,6 +170,7 @@ def parse_args(argv):
     return args
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change signature.
 def make_request(rid, action, command, addr, timeout):
     return {
         "request_id": rid,
@@ -178,6 +181,7 @@ def make_request(rid, action, command, addr, timeout):
     }
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change signature.
 def parse_ieee_block(buf: bytes) -> bytes:
     """Strip the IEEE 488.2 definite-length block header `#<n><nnn...>`."""
     if not buf or buf[0:1] != b"#":
@@ -187,6 +191,7 @@ def parse_ieee_block(buf: bytes) -> bytes:
     return buf[2 + n:2 + n + length]
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change signature or return shape.
 async def one_shot(ws, action, command, addr, timeout):
     """Send one request, return (meta, payload).
 
@@ -232,6 +237,7 @@ async def one_shot(ws, action, command, addr, timeout):
     return meta, None
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change signature.
 def decode_samples(body: bytes, width: int):
     """Decode a CURVE? payload (header already stripped) to signed ints."""
     n = len(body) // width
@@ -240,6 +246,7 @@ def decode_samples(body: bytes, width: int):
     return list(struct.unpack(f">{n}h", body[: n * width]))
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change signature.
 def parse_wfmpre(data: str) -> dict:
     """Parse a TDS784A WFMPRE? response into a dict of leaf -> value-string.
 
@@ -262,6 +269,7 @@ def parse_wfmpre(data: str) -> dict:
     return result
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change signature.
 async def query_preamble(ws, addr, timeout):
     """Fetch the full waveform preamble in one shot and parse the scaling
     factors. Returns a float dict or None on failure (prints why)."""
@@ -285,6 +293,7 @@ async def query_preamble(ws, addr, timeout):
     return pre
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change signature.
 async def query_value(ws, addr, timeout, command):
     """Run a query and return the trimmed value string, or None on failure.
 
@@ -299,6 +308,7 @@ async def query_value(ws, addr, timeout, command):
 
 
 # Setup queries that don't depend on the channel.
+# MCP-LIBRARY: imported by mcp_server. Do not change tuple shape.
 _GLOBAL_META_QUERIES = (
     ("horizontal_scale_s",   "HORIZONTAL:MAIN:SCALE?"),
     ("record_length",        "HORIZONTAL:RECORDLENGTH?"),
@@ -315,6 +325,7 @@ _GLOBAL_META_QUERIES = (
     ("trigger_holdoff_s",    "TRIGGER:MAIN:HOLDOFF:VALUE?"),
 )
 
+# MCP-LIBRARY: imported by mcp_server. Do not change tuple shape.
 _PER_CHANNEL_META_QUERIES = (
     ("scale_v",       "{ch}:SCALE?"),
     ("position_div",  "{ch}:POSITION?"),
@@ -326,6 +337,8 @@ _PER_CHANNEL_META_QUERIES = (
 )
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change signature; mcp_server
+# passes a SimpleNamespace with .addr and .timeout to mimic the CLI args.
 async def collect_metadata(ws, args, channels, capture_time):
     """Query the scope for setup state. Failures on individual queries are
     silent (the key is just not added). Returns an ordered dict."""
@@ -351,6 +364,7 @@ async def collect_metadata(ws, args, channels, capture_time):
     return meta
 
 
+# MCP-LIBRARY: imported by mcp_server. args needs .addr, .timeout, .width.
 async def _setup_channel(ws, channel, args):
     """One-time per-channel DATA:* setup (source / encoding / width)."""
     for cmd in (f"DATA:SOURCE {channel}",
@@ -363,6 +377,7 @@ async def _setup_channel(ws, channel, args):
     return True
 
 
+# MCP-LIBRARY: imported by mcp_server. args needs .addr, .timeout.
 async def _set_window(ws, args, start, stop):
     for cmd in (f"DATA:START {start}", f"DATA:STOP {stop}"):
         meta, _ = await one_shot(ws, "write", cmd, args.addr, args.timeout)
@@ -372,6 +387,8 @@ async def _set_window(ws, args, start, stop):
     return True
 
 
+# MCP-LIBRARY: imported by mcp_server. args needs .addr, .timeout, .width,
+# .points, .start_index, .end_index, .chunk_bytes.
 async def capture_channel(ws, channel, args, want_preamble):
     """Capture a (possibly windowed, possibly chunked) waveform for one channel.
 
@@ -548,6 +565,7 @@ async def run_simple(args):
             print(f"saved {len(payload)} bytes to {path}")
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change keys/values.
 _HARDCOPY_EXT = {
     "TIFF": "tif",
     "BMP": "bmp", "BMPCOLOR": "bmp",
@@ -556,9 +574,11 @@ _HARDCOPY_EXT = {
 }
 
 # PCX-family is decoded to PNG client-side; the rest is written as-is.
+# MCP-LIBRARY: imported by mcp_server. Do not change set membership.
 _HARDCOPY_PNG_FORMATS = {"PCX", "PCXCOLOR"}
 
 
+# MCP-LIBRARY: imported by mcp_server. Do not change signature.
 def pcx_bytes_to_png(pcx_bytes: bytes, png_path: str):
     """Decode a PCX byte stream and save as PNG. Pillow handles both
     1-bit/4-bit/8-bit and 24-bit PCX variants the TDS784A emits."""

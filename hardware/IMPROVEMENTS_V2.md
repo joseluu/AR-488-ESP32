@@ -12,6 +12,7 @@ This document tracks identified hardware risks and recommended revisions for the
 ## 1. nice to have
 * MCP supply must be 3.3V, the current design is for a Heltec Wifi Kit 32 (V2) try to find a design compatible with other versions
 * map GPIO 5 to a test pin onboard
+* Add an I2S microphone to be able to transmit voice commands to the AI
 * Add a ground testing pin
 * increase pin hole diameter by 0.1mm for the 488 connector pins
 * The edge on the GPIB plug side can be shaved back 3mm

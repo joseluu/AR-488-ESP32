@@ -8,6 +8,7 @@ dependencies = [
     "circuit-synth",
     "websockets",
     "pillow",
+    "mcp[cli]",
 ]
 
 [tool.uv.sources]

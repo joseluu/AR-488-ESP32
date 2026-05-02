@@ -32,10 +32,12 @@ TDS784A through the AR-488-ESP32 GPIB gateway. It supersedes
                      GPIB bus -> TDS784A
 ```
 
-- One **persistent** WebSocket connection per MCP-server lifetime, with an
-  asyncio lock so only one SCPI exchange is in flight at a time.
+- One persistent WebSocket connection for the server lifetime, with a
+  single `asyncio.Lock` around send/recv. No reconnect logic — if the WS
+  drops the user restarts the MCP server.
 - Connection params come from env vars: `AR488_HOST` (required), `AR488_ADDR`
   (default 1), `AR488_TIMEOUT_MS` (default 2000).
+- No caching. `*IDN?` and `SET?` are queried each time they're asked for.
 - All I/O primitives (`one_shot`, `parse_ieee_block`, `parse_wfmpre`,
   `query_value`, `_setup_channel`, `_set_window`, `capture_channel`,
   `pcx_bytes_to_png`, …) are imported from `request_gpib.py`. Each consumed
@@ -56,7 +58,8 @@ dedicated `get_errors` tool.
 
 ### Units
 Returned values are always SI (volts, seconds, hertz, ohms). Raw ADC codes
-are only exposed via `get_waveform_raw`.
+aren't exposed in v1 — `raw_scpi("CURVE?", binary=True)` is the escape hatch
+if ever needed.
 
 ### Atomic multi-channel capture
 `get_waveform(channels=[…])` performs one single-sequence acquisition and
@@ -64,15 +67,15 @@ reads all requested channels from that record. CH1 and CH2 are guaranteed to
 share the same trigger event.
 
 ### Destructive-action guard
-Three tools are gated behind an explicit `confirm=True` argument and refuse
-to run otherwise:
-- `factory_reset` (FACtory)
-- `system_reset` (`*RST`)
-- `set_setup_state` (sending an arbitrary SET? string back)
+Two tools are gated behind an explicit `confirm=True` argument:
+- `factory_reset` (FACtory) — wipes all NVRAM setups; the user wants to
+  exercise this manually before trusting it.
+- `set_setup_state` (sending an arbitrary SET? string back) — does **not**
+  require a prior `factory_reset`; the AI may trust a previously captured
+  state.
 
-Per the user's preference, `set_setup_state` does **not** require a
-`factory_reset` to be performed first — the AI may trust a previously
-captured state.
+`*RST` is not exposed as a separate tool — `set_setup_state` covers
+"restore a known good", and `factory_reset` covers "panic button".
 
 ### Statistics — two flavors, both exposed
 The TDS784A firmware has **no** measurement-statistics SCPI group (no
@@ -98,14 +101,13 @@ the right one.
 
 # Phase 1 — v1 tool surface
 
-The 25-tool v1 covers everything in the original proposal plus the gaps
-called out in the critique. Phase-2 features are deliberately out of scope.
+~18 tools across 7 groups. Anything more obscure goes through `raw_scpi`.
 
 ## 1. Connection & status
 
 ### `verify_instrument_identity`
 - SCPI: `*IDN?`
-- Returns: `{vendor, model, serial, firmware}`. Cached after first call.
+- Returns: `{vendor, model, serial, firmware}`.
 
 ### `get_errors`
 - SCPI: `*ESR?` then `ALLEv?` (drain queue)
@@ -116,16 +118,11 @@ called out in the critique. Phase-2 features are deliberately out of scope.
 - Returns: `{ok: bool, elapsed_s}`. Used internally by single-shot capture;
   exposed for the AI to use after `set_setup_state` or large changes.
 
-### `get_busy()`
-- SCPI: `BUSY?`
-- Returns: `{busy: bool}`.
-
 ## 2. Setup state management
 
 ### `get_setup_state()`
 - SCPI: `HEADER ON; SET?`
-- Returns: `{setup_string, idn, captured_at}`. Result cached; cache invalidated
-  by any write tool.
+- Returns: `{setup_string, idn, captured_at}`.
 
 ### `set_setup_state(setup_string, confirm=False)`
 - Sends the string verbatim, then `*OPC?`, then drains errors.
@@ -140,11 +137,8 @@ called out in the critique. Phase-2 features are deliberately out of scope.
 
 ### `factory_reset(confirm=False)`
 - SCPI: `FACtory`
-- **Refuses unless `confirm=True`.** Marked clearly as the most disruptive tool.
-
-### `system_reset(confirm=False)`
-- SCPI: `*RST`
-- **Refuses unless `confirm=True`.**
+- **Refuses unless `confirm=True`.** Most disruptive tool; user will
+  validate it manually before trusting it.
 
 ## 3. Acquisition control
 
@@ -156,16 +150,10 @@ called out in the critique. Phase-2 features are deliberately out of scope.
 - SCPI: `ACQUIRE:MODE <mode>`
 
 ### `set_average_count(n)` — n ∈ {2,4,8,…,10000}
-- SCPI: `ACQUIRE:NUMAVG <n>`
-
-### `set_envelope_count(n)`
-- SCPI: `ACQUIRE:NUMENV <n>`
+- SCPI: `ACQUIRE:NUMAVG <n>`. Envelope count via `raw_scpi` if needed.
 
 ### `set_acquisition_state(state)` — state ∈ {RUN, STOP}
 - SCPI: `ACQUIRE:STATE <state>`
-
-### `set_stop_after(mode)` — mode ∈ {RUNSTOP, SEQUENCE, LIMIT}
-- SCPI: `ACQUIRE:STOPAFTER <mode>`
 
 ### `arm_single_and_wait(timeout_s=30)` — atomic
 - Sequence: `ACQUIRE:STOPAFTER SEQUENCE; ACQUIRE:STATE RUN; *OPC?`
@@ -180,10 +168,7 @@ called out in the critique. Phase-2 features are deliberately out of scope.
   `CHx:BANDWIDTH`, `CHx:IMPEDANCE`, `CHx:PROBE`, `CHx:UNITS`, `CHx:DESKEW`,
   `CHx:INVERT`.
 - Position vs. offset distinction is documented in the tool description.
-
-### `set_channel_display(ch, on)`
-- SCPI: `SELECT:CH<n> ON|OFF`. Useful to reduce screen clutter without
-  losing settings.
+- Channel on/off via `raw_scpi("SELECT:CH<n> ON|OFF")` if needed.
 
 ### `set_horizontal(scale_s=None, position_pct=None, record_length=None)`
 - SCPI: `HORIZONTAL:MAIN:SCALE`, `HORIZONTAL:TRIGGER:POSITION`,
@@ -219,10 +204,7 @@ called out in the critique. Phase-2 features are deliberately out of scope.
 - SCPI: `MEASUREMENT:REFLEVEL:METHOD`,
   `MEASUREMENT:REFLEVEL:{ABS,PERC}:{HIGH,MID,LOW,MID2}`.
 - Affects how rise/fall/duty are computed.
-
-### `set_measurement_gating(mode, t1_s=None, t2_s=None)`
-- mode ∈ {OFF, ON} (with vertical-bar cursors gating the window).
-- SCPI: `MEASUREMENT:GATING ...` plus cursor positioning if needed.
+- Measurement gating (rare) is left to `raw_scpi`.
 
 ### `measure_with_acq_stats(ch, kind, mode='AVERAGE', count=64, source2=None)`
 - Acquisition-level stats. Sets `ACQUIRE:MODE <mode>`, `NUMAVG/NUMENV count`,
@@ -258,10 +240,6 @@ called out in the critique. Phase-2 features are deliberately out of scope.
 - Windowing via `start_idx`/`end_idx` (1-based inclusive), maps to
   DATA:START / DATA:STOP. Auto-chunking handled internally if window > 32 KiB.
 
-### `get_waveform_raw(channel, start_idx=None, end_idx=None, width=2)`
-- Same plumbing but returns raw codes + preamble; no scaling. For when the
-  AI wants to compute its own dB/FFT/etc.
-
 ## 7. Screen capture
 
 ### `get_screen(layout='PORTRAIT', palette='COLOR')`
@@ -273,7 +251,7 @@ called out in the critique. Phase-2 features are deliberately out of scope.
 - Caller may choose to save the bytes; the MCP does not write a file by
   default.
 
-## 8. Escape hatch
+## 8. Escape hatch (the safety valve for everything trimmed)
 
 ### `raw_scpi(command, expect_reply=None, binary=False, timeout_ms=None)`
 - `expect_reply=None` autodetects from `?` in command (mirrors current CLI).
@@ -303,20 +281,13 @@ Add when v1 is stable. Each is roughly one tool group.
 
 # Skill: `/scope`
 
-A Claude Code skill (`~/.claude/skills/scope.md`) documents:
-- When to invoke (any TDS784A interaction).
-- How to drain errors after writes.
-- Common workflows: autoset+characterize, before/after with `get_setup_state`,
-  averaging vs polled-stats trade-off, atomic multi-channel capture.
-- The Phase-1 / Phase-2 boundary so the AI doesn't ask for tools that don't
-  exist yet.
-
-The skill points at the MCP server, which the user must have configured in
-`.mcp.json` (entry will be added in the implementation).
+A short Claude Code skill (`~/.claude/skills/scope.md`) that triggers on
+"TDS784", "oscilloscope", etc. Documents the v1 tool surface, the
+AVERAGE-vs-polled stats trade-off, the confirm-required tools, and points
+at `raw_scpi` for anything not exposed.
 
 ---
 
-# Tool count summary
+# Tool count
 
-- **Phase 1 (v1)**: 25 tools across 8 groups.
-- **Phase 2**: ~15 additional tools.
+**Phase 1**: ~18 tools. **Phase 2**: deferred backlog above (~15 more).
