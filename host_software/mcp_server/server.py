@@ -675,9 +675,14 @@ async def measure_snapshot(ch: int) -> dict:
 
     Returns {kind: {value, unit}} for each measurement that succeeded."""
     chtok = _ch_token(ch)
+    # Set the IMMED source first so the on-screen overlay (next line)
+    # measures the requested channel.
     src = await _write(f"MEASUREMENT:IMMED:SOURCE1 {chtok}")
     if not _ok(src):
         return {"ok": False, "error": _err(src)}
+    # Trigger the on-screen Snapshot overlay so the user can watch the
+    # scope's own snapshot while we fan out individual queries below.
+    await _write("MEASUREMENT:SNAPSHOT")
 
     results: dict[str, dict] = {}
     for kind in _SNAPSHOT_KINDS:
@@ -691,6 +696,9 @@ async def measure_snapshot(ch: int) -> dict:
         v = _to_float(_strip_header(val_meta.get("data", "")))
         u = _strip_header(unit_meta.get("data", "")).strip('"') if _ok(unit_meta) else ""
         results[kind] = {"value": v, "unit": u}
+
+    # Dismiss the on-screen overlay now that gathering is done.
+    await _write("MEASUREMENT:CLEARSNAPSHOT")
 
     return {
         "ok": True,
