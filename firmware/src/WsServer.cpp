@@ -77,13 +77,13 @@ void WsServer::handleMessage_(AsyncWebSocketClient* client, const uint8_t* data,
     req.addr       = doc["addr"]       | 0;
     req.timeout_ms = doc["timeout_ms"] | 0;
 
-    // GPIB messages need a terminator. Append \n if caller didn't.
+    // GPIB uses EOI as the message terminator — no \n needed.
+    // If the caller already included \n/\r, strip it so EOI lands on
+    // the last real character (the TDS784A treats a trailing \n as
+    // literal data when it follows an argument value).
     size_t cl = strlen(req.command);
-    if (cl > 0 && cl + 1 < sizeof(req.command) &&
-        req.command[cl - 1] != '\n' && req.command[cl - 1] != '\r') {
-        req.command[cl] = '\n';
-        req.command[cl + 1] = 0;
-    }
+    while (cl > 0 && (req.command[cl - 1] == '\n' || req.command[cl - 1] == '\r'))
+        req.command[--cl] = 0;
 
     if (!worker_ || !worker_->submit(req)) {
         JsonDocument resp;

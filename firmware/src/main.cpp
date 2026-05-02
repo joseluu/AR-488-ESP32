@@ -21,6 +21,7 @@
 #include "Display.h"
 #include "GpibBus.h"
 #include "GpibWorker.h"
+#include "Version.h"
 #include "WsServer.h"
 
 #include "../network_creds.h"                   // ssid, password
@@ -101,10 +102,10 @@ void setup() {
     Serial.begin(115200);
     delay(150);
     Serial.println();
-    Serial.println("AR-488-ESP32 firmware - Phase 2");
+    Serial.printf("AR-488-ESP32 firmware v%s\n", AR488_FW_VERSION);
 
     g_display.begin();
-    g_display.title("AR-488 v0.2");
+    g_display.title("AR-488 v" AR488_FW_VERSION);
     g_display.log("Booting...");
 
     if (!g_gpib.begin()) {

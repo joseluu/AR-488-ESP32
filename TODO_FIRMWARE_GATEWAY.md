@@ -1,108 +1,58 @@
-# TODO — AR-488-ESP32 firmware / gateway issues
+# AR-488-ESP32 firmware / gateway — issue log
 
-Issues observed during the first hardware-in-the-loop smoke test of the
-`tek-tds784a` MCP server (2026-05-02). These are **not** MCP server
-bugs — those are tracked separately and have been fixed in
-`host_software/mcp_server/server.py`. Items below sit on the firmware
-or WebSocket gateway side.
+Original report (2026-05-02) flagged three "firmware/gateway problems"
+seen during the first hardware-in-the-loop smoke test of the
+`tek-tds784a` MCP server. Investigation on 2026-05-03 with serial trace
+points (Version v0.4-trace) showed only **one** of the three was an
+actual firmware bug — the other two were misdiagnosed.
 
-Firmware is a platformio development done in the firmware/directory
+## 1. ~~First 2 bytes of some commands dropped~~ — NOT A FIRMWARE BUG
 
-Gateway is a python program: host_software/request_gpib.py
+**Original symptom:** Errors like `unrecognized command - RIZONTAL:MAIN:SAMPLERATE?` (looks like "HO" was lost).
 
-## 1. First 2 bytes of some commands dropped
-
-The TDS784A's error queue surfaced these stale `113,"Undefined header"`
-events repeatedly, drained on otherwise-unrelated tool calls:
-
-- `unrecognized command - RIZONTAL:MAIN:SAMPLERATE?` (sent: `HORIZONTAL:MAIN:SAMPLERATE?`)
-- `unrecognized command - IGGER:MAIN:HOLDOFF:` (sent: `TRIGGER:MAIN:HOLDOFF:VALUE?`)
-
-Both are full SCPI strings sent from the host with the leading 2 bytes
-missing on arrival. Both happen to fire from `collect_metadata` (called
-by `get_acquisition_setup` and `get_waveform`), which queues a sequence
-of `query` commands quickly.
-
-Hypotheses to investigate, in order of cheapness:
-
-1. **GPIB write-after-write timing**: a previous talker isn't fully
-   released before the next listener-addressed write begins, so the
-   first 1–2 ATN-controlled command bytes get clipped on the bus.
-2. **ESP32 UART → GPIB front-end race**: the bridge MCU doesn't drain
-   its TX FIFO before asserting EOI on the previous command.
-3. **WebSocket framing**: each request is its own JSON frame; if the
-   firmware reads the JSON, immediately starts a GPIB transaction, but
-   the `command` string is read into a buffer that's reused before the
-   GPIB write completes, the second command can clobber the first
-   couple of bytes.
-
-The truncation looks deterministic on those two SCPI strings, but the
-visible queries that *do* succeed (e.g. `HORIZONTAL:MAIN:SCALE?`,
-`HORIZONTAL:RECORDLENGTH?`) are issued in the same loop, so the issue
-isn't tied to any one string. Likely an intermittent race that's biased
-toward certain timings.
-
-**Reproduce**: call `get_acquisition_setup(["CH1","CH2"])` two or three
-times back-to-back; the next `get_errors` will surface accumulated
-`113` events.
-
-## 2. `\0A` appended to HARDCOPY setup command
-
-After a successful screen capture the error queue surfaced:
+**Real cause:** The scope's error message buffer is showing the *parse-failure context*, not the bytes received. Trace confirmed the gateway sends the full command:
 
 ```
-102,"Syntax error invalid character data - HARDCOPY:PALETTE COLOR\0A"
+[trace ws] action=query len_after=27 cmd='HORIZONTAL:MAIN:SAMPLERATE?'
+[trace sendData] len=27: 'HORIZONTAL:MAIN:SAMPLERATE?'
 ```
 
-`\0A` is `\n`. Some path in the firmware appends a literal newline byte
-to one of the HARDCOPY setup writes (likely `HARDCOPY:PALETTE COLOR`,
-which is the last write before `HARDCOPY START`). The TDS784A's GPIB
-parser flags it as invalid character data inside the argument value.
+The TDS784A v4.1e simply **doesn't have** a `HORIZONTAL:MAIN:SAMPLERATE?` command. It also uses `HOLDOFF:TIME` not `HOLDOFF:VALUE`. Both are commands from newer Tek scope models.
 
-The hardcopy still produced a valid PCXCOLOR stream and a clean PNG —
-so the scope is clearly not in a wedged state — but the spurious
-`\0A` indicates command terminator handling is off for write commands
-that end with a SCPI argument value (vs. just a header).
+**Fix:** in `host_software/request_gpib.py`:
+- removed `("sample_rate_hz", "HORIZONTAL:MAIN:SAMPLERATE?")` from `_GLOBAL_META_QUERIES` — derive from `record_length / (10 * horizontal_scale_s)` if needed
+- replaced `TRIGGER:MAIN:HOLDOFF:VALUE?` with `TRIGGER:MAIN:HOLDOFF:TIME?`
 
-**Look at**: how `gpib_write()` (or equivalent) builds the byte buffer
-in the firmware. Is it terminating with EOI only, or EOI + `\n`? GPIB
-convention is EOI alone; some scopes will swallow a trailing `\n` but
-the TDS784A treats it as part of the argument when the previous byte
-was a non-whitespace character of an argument value.
+---
 
-## 3. `SET?` response truncated at ~100 bytes
+## 2. ~~`\0A` appended to HARDCOPY setup command~~ — NOT A FIRMWARE BUG
 
-`get_setup_state()` (which sends `HEADER ON` then `SET?`) returns a
-`setup_string` cut off mid-quoted-string:
+**Original symptom:** `Syntax error; invalid character data - HARDCOPY:PALETTE COLOR`.
+
+**Real cause:** The TDS784A v4.1e's `HARDCOPY:PALETTE` only accepts `HARDCOPY` as a value on this firmware. `COLOR`, `MONOCHROME`, `INKSAVER`, `NORMAL` all return error 102 (probed). The image still rendered correctly because the scope kept its prior PALETTE setting after the rejected SET, but the error queue was being polluted.
+
+**Fix:** in `host_software/mcp_server/server.py` `get_screen` — default palette to `HARDCOPY`, reject any other input with a helpful error.
+
+---
+
+## 3. `SET?` response truncated — REAL FIRMWARE BUG, FIXED IN v0.4
+
+**Original symptom:** `setup_string` cut off at ~89 bytes mid-quoted-string (`...:APPM:TITL "Application`).
+
+**Real cause:** The TDS784A's `SET?` response embeds `\n` as an internal line separator (e.g. inside `"Application\nMenu"`), with EOI asserted **only on the actual final byte**. The firmware's `query()` was breaking on `\n` OR EOI, so it terminated at the first internal newline:
 
 ```
-:ACQ:STOPA RUNST;STATE 1;MOD SAM;NUME 1;NUMAV 3;REPE 1;AUTOSA 0;:APPM:TITL "Application
+[trace query recv] n=88, terminated=1, last_b=0x0A, last_eoi=0
 ```
 
-A real `SET?` response is several KB. The cut at exactly the start of a
-quoted string suggests either:
+`last_eoi=0` confirms the scope did NOT mean to terminate.
 
-- a fixed-size response buffer in the firmware (the WebSocket data
-  field caps out before the GPIB read finishes), or
-- a heuristic that mistakes the opening `"` for end-of-data, or
-- a JSON serialization that escapes the `"` and overflows somewhere.
+**Fix (`firmware/src/GpibBus.cpp`):** `query()` and `receive()` now break on EOI only — `\n` is just a data byte. Same logic applies to `receiveRaw`/`queryRaw` paths but those already only stop on EOI. Verified on v0.4 — `get_setup_state` now returns thousands of bytes including the multi-line `"Application\nMenu"` block, channel settings, trigger setup, math definitions, cursors. Hits the 4 KB buffer's `...truncated` suffix because the full SET? is even longer; for the complete dump, use the `binary_query` action which streams.
 
-**Look at**: the JSON-over-WS path on `query` action — specifically the
-buffer that accumulates the GPIB read before serializing it into the
-`data` field. Compare with how `--waveform` capture handles long
-responses (it uses a binary-stream path that already works for hundreds
-of KB). `SET?` is a long ASCII response, which is the awkward middle
-case.
+---
 
-Workaround on the host side: use `binary_query` for `SET?`, which
-should ride the streaming path that already works. The MCP server's
-`get_setup_state` could be switched to `binary_query` if firmware fix
-is non-trivial.
+## Notes for future smoke tests
 
-## Priority
-
-1 (truncation of first bytes) is the most concerning — it silently
-breaks any read query whose first 2 chars matter (which is almost all
-of them). 3 (SET? truncation) blocks the "save setup / restore setup"
-workflow that the MCP `set_setup_state` tool relies on. 2 (stray `\0A`)
-is cosmetic — only shows up in the error queue.
+- Always query `gateway_firmware_version` first — confirms the running firmware matches what we think we built.
+- TDS784A error messages truncate to a parse-context window. They show *where the parser stopped*, not what was received over the wire. Don't infer transmission corruption from them — use serial trace points on the gateway side instead.
+- TDS784A SCPI uses the GPIB EOI line as the only reliable end-of-message marker. `\n` may appear mid-response.

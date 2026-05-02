@@ -243,6 +243,15 @@ async def raw_scpi(
 
 
 @mcp.tool()
+async def gateway_firmware_version() -> dict:
+    """Return the AR-488-ESP32 gateway firmware version (no GPIB traffic)."""
+    meta, _ = await client.request("version", "")
+    if not _ok(meta):
+        return {"ok": False, "error": _err(meta)}
+    return {"ok": True, "version": meta.get("version", "")}
+
+
+@mcp.tool()
 async def verify_instrument_identity() -> dict:
     """Return *IDN? parsed into {vendor, model, serial, firmware}."""
     meta = await _query("*IDN?")
@@ -647,26 +656,46 @@ async def measure(
     return res
 
 
+_SNAPSHOT_KINDS = (
+    "PERIOD", "FREQ", "PWIDTH", "NWIDTH", "BURST", "RISE", "FALL",
+    "PDUTY", "NDUTY", "POVERSHOOT", "NOVERSHOOT",
+    "HIGH", "LOW", "MAXIMUM", "MINIMUM", "AMPLITUDE", "PK2PK",
+    "MEAN", "CMEAN", "RMS", "CRMS", "AREA", "CAREA",
+)
+
+
 @mcp.tool()
 async def measure_snapshot(ch: int) -> dict:
-    """MEASUREMENT:IMMED:SNAPSHOT? — all 25 measurements in one round-trip.
+    """All standard immediate measurements for one channel.
 
-    Returns a dict of {measurement_name: {value, unit}}. The exact set of
-    fields depends on firmware; the response is parsed by header."""
+    On the TDS784A, `MEASUREMENT:SNAPSHOT` only triggers the on-screen
+    snapshot panel; there's no SCPI query that returns every value at
+    once. We fan out individual MEASUREMENT:IMMED queries for the same
+    set the on-screen snapshot displays (~23 round-trips, a few seconds).
+
+    Returns {kind: {value, unit}} for each measurement that succeeded."""
     chtok = _ch_token(ch)
-    m = await _write(f"MEASUREMENT:IMMED:SOURCE1 {chtok}")
-    if not _ok(m):
-        return {"ok": False, "error": _err(m)}
-    snap = await _query("MEASUREMENT:SNAPSHOT", timeout_ms=max(client.timeout_ms, 8000))
-    if not _ok(snap):
-        # Some firmware spell it as "MEASUREMENT:IMMED:SNAPSHOT?" — try fallback.
-        snap = await _query("MEASUREMENT:IMMED:SNAPSHOT?", timeout_ms=max(client.timeout_ms, 8000))
-    if not _ok(snap):
-        return {"ok": False, "error": _err(snap)}
+    src = await _write(f"MEASUREMENT:IMMED:SOURCE1 {chtok}")
+    if not _ok(src):
+        return {"ok": False, "error": _err(src)}
+
+    results: dict[str, dict] = {}
+    for kind in _SNAPSHOT_KINDS:
+        type_meta = await _write(f"MEASUREMENT:IMMED:TYPE {kind}")
+        if not _ok(type_meta):
+            continue
+        val_meta = await _query("MEASUREMENT:IMMED:VALUE?")
+        unit_meta = await _query("MEASUREMENT:IMMED:UNITS?")
+        if not _ok(val_meta):
+            continue
+        v = _to_float(_strip_header(val_meta.get("data", "")))
+        u = _strip_header(unit_meta.get("data", "")).strip('"') if _ok(unit_meta) else ""
+        results[kind] = {"value": v, "unit": u}
+
     return {
         "ok": True,
-        "raw": snap.get("data", ""),
         "source": chtok,
+        "measurements": results,
         "errors_after": await drain_errors(),
     }
 
@@ -974,16 +1003,22 @@ def _pcx_bytes_to_png_bytes(pcx_bytes: bytes) -> bytes:
 @mcp.tool()
 async def get_screen(
     layout: str = "PORTRAIT",
-    palette: str = "COLOR",
+    palette: str = "HARDCOPY",
 ) -> list:
     """Capture the scope screen as PNG. Returns an inline image content
     block (so Claude can see it) plus a JSON metadata block.
 
-    Internally: HARDCOPY:FORMAT PCXCOLOR → fetch → decode to PNG."""
+    Internally: HARDCOPY:FORMAT PCXCOLOR → fetch → decode to PNG.
+    Note: TDS784A v4.1e only accepts HARDCOPY as a PALETTE value;
+    other names (COLOR / MONOCHROME / INKSAVER) error with 102."""
     if layout.upper() not in {"PORTRAIT", "LANDSCAPE"}:
         return [TextContent(type="text",
                             text=json.dumps({"ok": False,
                                              "error": "layout must be PORTRAIT or LANDSCAPE"}))]
+    if palette.upper() != "HARDCOPY":
+        return [TextContent(type="text",
+                            text=json.dumps({"ok": False,
+                                             "error": "palette must be HARDCOPY (only value the TDS784A accepts)"}))]
     setup_cmds = [
         "HARDCOPY:PORT GPIB",
         "HARDCOPY:FORMAT PCXCOLOR",

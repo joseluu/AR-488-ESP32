@@ -308,11 +308,13 @@ async def query_value(ws, addr, timeout, command):
 
 
 # Setup queries that don't depend on the channel.
+# Note: TDS784A has no SAMPLERATE? command — sample rate is derived
+# client-side from record_length / (10 * horizontal_scale_s).
+# Holdoff is HOLDOFF:TIME (per SET? on TDS784A v4.1e), not :VALUE.
 # MCP-LIBRARY: imported by mcp_server. Do not change tuple shape.
 _GLOBAL_META_QUERIES = (
     ("horizontal_scale_s",   "HORIZONTAL:MAIN:SCALE?"),
     ("record_length",        "HORIZONTAL:RECORDLENGTH?"),
-    ("sample_rate_hz",       "HORIZONTAL:MAIN:SAMPLERATE?"),
     ("trigger_position_pct", "HORIZONTAL:TRIGGER:POSITION?"),
     ("acquire_mode",         "ACQUIRE:MODE?"),
     ("acquire_count",        "ACQUIRE:NUMACQ?"),
@@ -322,7 +324,7 @@ _GLOBAL_META_QUERIES = (
     ("trigger_level_v",      "TRIGGER:MAIN:LEVEL?"),
     ("trigger_slope",        "TRIGGER:MAIN:EDGE:SLOPE?"),
     ("trigger_coupling",     "TRIGGER:MAIN:EDGE:COUPLING?"),
-    ("trigger_holdoff_s",    "TRIGGER:MAIN:HOLDOFF:VALUE?"),
+    ("trigger_holdoff_s",    "TRIGGER:MAIN:HOLDOFF:TIME?"),
 )
 
 # MCP-LIBRARY: imported by mcp_server. Do not change tuple shape.

@@ -6,6 +6,7 @@
 
 #include "Display.h"
 #include "GpibBus.h"
+#include "Version.h"
 
 static constexpr int QUEUE_DEPTH = 8;
 static constexpr int TASK_STACK  = 8192;
@@ -124,6 +125,12 @@ void GpibWorker::handle(const GpibRequest& req) {
         sendResponse(ws_, req.client_id, resp);
         return;
     }
+    if (strcmp(req.action, "version") == 0) {
+        resp["ok"] = true;
+        resp["version"] = AR488_FW_VERSION;
+        sendResponse(ws_, req.client_id, resp);
+        return;
+    }
 
     uint8_t addr = req.addr ? req.addr : scopeAddr_;
 
@@ -198,7 +205,7 @@ void GpibWorker::handle(const GpibRequest& req) {
         return;
     }
 
-    char buf[512];
+    char buf[4096];
     bool ok = false;
     int  n  = 0;
 

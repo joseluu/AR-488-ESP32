@@ -321,8 +321,13 @@ bool GpibBus::send(uint8_t addr, const char* cmd) {
 }
 
 int GpibBus::receive(uint8_t addr, char* buf, size_t maxLen, uint32_t timeoutMs) {
-    if (maxLen == 0) return -1;
+    static constexpr const char kTruncSuffix[] = "...truncated";
+    static constexpr size_t kSuffixLen = sizeof(kTruncSuffix) - 1;  // 13
+
+    if (maxLen <= kSuffixLen + 1) return -1;
     if (!lock()) return -1;
+
+    const size_t dataMax = maxLen - kSuffixLen;
 
     int n = -1;
     if (!addressTalk(/*talker=*/addr, /*listener=*/CTRL_ADDR)) {
@@ -332,13 +337,22 @@ int GpibBus::receive(uint8_t addr, char* buf, size_t maxLen, uint32_t timeoutMs)
     setListener();
 
     size_t i = 0;
-    while (i + 1 < maxLen) {
+    bool terminated = false;
+    while (i + 1 < dataMax) {
         uint8_t b;
         bool eoi;
         if (!readByte(b, eoi, timeoutMs)) break;
         buf[i++] = (char)b;
-        if (eoi || b == '\n') break;
+        // EOI is the only safe end-of-message marker — \n may appear
+        // mid-response on the TDS784A (SET? embeds line separators).
+        if (eoi) { terminated = true; break; }
     }
+
+    if (!terminated && i >= dataMax - 1) {
+        memcpy(buf + i, kTruncSuffix, kSuffixLen + 1);
+        i += kSuffixLen;
+    }
+
     buf[i] = 0;
     n = (int)i;
 
@@ -380,6 +394,10 @@ int GpibBus::queryRaw(uint8_t addr, const char* cmd, uint8_t* buf, size_t maxLen
         unlock();
         return -1;
     }
+
+    // Scope needs time to process the SCPI command and transition from
+    // listener → talker before we reverse-address the bus.
+    delay(2);
 
     if (!addressTalk(/*talker=*/addr, /*listener=*/CTRL_ADDR)) {
         unlock();
@@ -446,6 +464,10 @@ int GpibBus::queryRawStream(uint8_t addr, const char* cmd,
         return -1;
     }
 
+    // Scope needs time to process the SCPI command and transition from
+    // listener → talker before we reverse-address the bus.
+    delay(2);
+
     if (!addressTalk(/*talker=*/addr, /*listener=*/CTRL_ADDR)) {
         unlock();
         return -1;
@@ -475,14 +497,24 @@ int GpibBus::queryRawStream(uint8_t addr, const char* cmd,
 }
 
 int GpibBus::query(uint8_t addr, const char* cmd, char* buf, size_t maxLen, uint32_t timeoutMs) {
-    if (maxLen == 0) return -1;
+    static constexpr const char kTruncSuffix[] = "...truncated";
+    static constexpr size_t kSuffixLen = sizeof(kTruncSuffix) - 1;  // 13
+
+    if (maxLen <= kSuffixLen + 1) return -1;
     if (!lock()) return -1;
+
+    // Reserve space for truncation suffix so the caller can always detect it.
+    const size_t dataMax = maxLen - kSuffixLen;
 
     if (!addressTalk(/*talker=*/CTRL_ADDR, /*listener=*/addr) ||
         !sendData(cmd, strlen(cmd))) {
         unlock();
         return -1;
     }
+
+    // Scope needs time to process the SCPI command and transition from
+    // listener → talker before we reverse-address the bus.
+    delay(2);
 
     if (!addressTalk(/*talker=*/addr, /*listener=*/CTRL_ADDR)) {
         unlock();
@@ -491,15 +523,31 @@ int GpibBus::query(uint8_t addr, const char* cmd, char* buf, size_t maxLen, uint
     setListener();
 
     size_t i = 0;
-    while (i + 1 < maxLen) {
+    bool terminated = false;
+    bool last_eoi = false;
+    char last_b = 0;
+    while (i + 1 < dataMax) {
         uint8_t b;
         bool eoi;
         if (!readByte(b, eoi, timeoutMs)) break;
         buf[i++] = (char)b;
-        if (eoi || b == '\n') break;
+        last_b = (char)b;
+        last_eoi = eoi;
+        // TDS784A's SET? response embeds \n as a line separator inside
+        // the message, only asserting EOI on the actual final byte.
+        // Terminate on EOI only — \n alone may be mid-response.
+        if (eoi) { terminated = true; break; }
     }
+
+    // Buffer filled without seeing EOI or LF → response was longer than the buffer.
+    if (!terminated && i >= dataMax - 1) {
+        memcpy(buf + i, kTruncSuffix, kSuffixLen + 1);
+        i += kSuffixLen;
+    }
+
     buf[i] = 0;
     int n = (int)i;
+    (void)last_b; (void)last_eoi;
 
     setTalker();
     unlock();
