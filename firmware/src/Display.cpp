@@ -65,6 +65,20 @@ void Display::log(const char* fmt, ...) {
     render_();
 }
 
+void Display::replaceLast(const char* fmt, ...) {
+    char tmp[LINE_LEN];
+    va_list ap;
+    va_start(ap, fmt);
+    vsnprintf(tmp, sizeof(tmp), fmt, ap);
+    va_end(ap);
+
+    int idx = (next_ == 0) ? 0 : (next_ <= LINES ? next_ - 1 : LINES - 1);
+    strncpy(buf_[idx], tmp, LINE_LEN - 1);
+    buf_[idx][LINE_LEN - 1] = 0;
+    if (next_ == 0) next_ = 1;
+    render_();
+}
+
 void Display::show() {
     render_();
 }

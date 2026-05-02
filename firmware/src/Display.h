@@ -14,6 +14,7 @@ public:
     void clear();
     void title(const char* t);
     void log(const char* fmt, ...);             // appends one line, scrolls
+    void replaceLast(const char* fmt, ...);     // overwrites the most recent log line in place
     void show();                                 // call after multiple log()s
 
 private:

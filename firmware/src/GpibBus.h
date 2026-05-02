@@ -38,6 +38,17 @@ public:
     int  receiveRaw(uint8_t addr, uint8_t* buf, size_t maxLen, uint32_t timeoutMs = 2000);
     int  queryRaw(uint8_t addr, const char* cmd, uint8_t* buf, size_t maxLen, uint32_t timeoutMs = 2000);
 
+    // Streaming variants. Read until EOI, calling `cb` whenever the
+    // chunk buffer fills or EOI is reached. The buffer is reused
+    // between chunks; the callback must finish with the data before
+    // returning. Returning false from `cb` aborts the read.
+    typedef bool (*ChunkCb)(void* ctx, const uint8_t* data, size_t len, bool isLast);
+    int  receiveRawStream(uint8_t addr, uint8_t* chunkBuf, size_t chunkSize,
+                          ChunkCb cb, void* ctx, uint32_t timeoutMs = 2000);
+    int  queryRawStream(uint8_t addr, const char* cmd,
+                        uint8_t* chunkBuf, size_t chunkSize,
+                        ChunkCb cb, void* ctx, uint32_t timeoutMs = 2000);
+
     // Mutex (public so callers can group multiple ops in one critical section).
     bool lock(uint32_t timeoutMs = 2000);
     void unlock();

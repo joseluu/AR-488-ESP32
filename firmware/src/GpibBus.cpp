@@ -401,6 +401,79 @@ int GpibBus::queryRaw(uint8_t addr, const char* cmd, uint8_t* buf, size_t maxLen
     return (int)i;
 }
 
+int GpibBus::receiveRawStream(uint8_t addr, uint8_t* chunkBuf, size_t chunkSize,
+                              ChunkCb cb, void* ctx, uint32_t timeoutMs) {
+    if (chunkSize == 0 || !chunkBuf || !cb) return -1;
+    if (!lock()) return -1;
+
+    if (!addressTalk(/*talker=*/addr, /*listener=*/CTRL_ADDR)) {
+        unlock();
+        return -1;
+    }
+    setListener();
+
+    size_t total = 0;
+    size_t fill  = 0;
+    bool   ok    = true;
+    bool   done  = false;
+    while (!done) {
+        uint8_t b;
+        bool eoi;
+        if (!readByte(b, eoi, timeoutMs)) { ok = false; break; }
+        chunkBuf[fill++] = b;
+        total++;
+        if (eoi) done = true;
+        if (fill == chunkSize || done) {
+            if (!cb(ctx, chunkBuf, fill, done)) { ok = false; break; }
+            fill = 0;
+        }
+    }
+
+    setTalker();
+    unlock();
+    return ok ? (int)total : -1;
+}
+
+int GpibBus::queryRawStream(uint8_t addr, const char* cmd,
+                            uint8_t* chunkBuf, size_t chunkSize,
+                            ChunkCb cb, void* ctx, uint32_t timeoutMs) {
+    if (chunkSize == 0 || !chunkBuf || !cb) return -1;
+    if (!lock()) return -1;
+
+    if (!addressTalk(/*talker=*/CTRL_ADDR, /*listener=*/addr) ||
+        !sendData(cmd, strlen(cmd))) {
+        unlock();
+        return -1;
+    }
+
+    if (!addressTalk(/*talker=*/addr, /*listener=*/CTRL_ADDR)) {
+        unlock();
+        return -1;
+    }
+    setListener();
+
+    size_t total = 0;
+    size_t fill  = 0;
+    bool   ok    = true;
+    bool   done  = false;
+    while (!done) {
+        uint8_t b;
+        bool eoi;
+        if (!readByte(b, eoi, timeoutMs)) { ok = false; break; }
+        chunkBuf[fill++] = b;
+        total++;
+        if (eoi) done = true;
+        if (fill == chunkSize || done) {
+            if (!cb(ctx, chunkBuf, fill, done)) { ok = false; break; }
+            fill = 0;
+        }
+    }
+
+    setTalker();
+    unlock();
+    return ok ? (int)total : -1;
+}
+
 int GpibBus::query(uint8_t addr, const char* cmd, char* buf, size_t maxLen, uint32_t timeoutMs) {
     if (maxLen == 0) return -1;
     if (!lock()) return -1;

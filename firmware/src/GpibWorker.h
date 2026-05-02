@@ -8,6 +8,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include <Preferences.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
 
@@ -29,14 +30,21 @@ public:
     bool begin(GpibBus* bus, AsyncWebSocket* ws, Display* display, uint8_t scopeAddr);
     bool submit(const GpibRequest& req, TickType_t wait = 0);
 
+    uint8_t defaultAddr() const { return scopeAddr_; }
+    void    setDefaultAddr(uint8_t addr);                // updates RAM + NVS
+
+    // Read the persisted default address (or `fallback` if unset/invalid).
+    static uint8_t loadPersistedAddr(uint8_t fallback);
+
 private:
     static void taskTrampoline(void* arg);
     void run();
     void handle(const GpibRequest& req);
 
-    GpibBus*         bus_     = nullptr;
-    AsyncWebSocket*  ws_      = nullptr;
-    Display*         display_ = nullptr;
-    uint8_t          scopeAddr_ = 1;
-    QueueHandle_t    queue_   = nullptr;
+    GpibBus*         bus_       = nullptr;
+    AsyncWebSocket*  ws_        = nullptr;
+    Display*         display_   = nullptr;
+    volatile uint8_t scopeAddr_ = 1;                     // read across cores
+    QueueHandle_t    queue_     = nullptr;
+    Preferences      prefs_;
 };

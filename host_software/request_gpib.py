@@ -10,7 +10,8 @@ Invocation
     send_gpib.py <ip> <scpi-command>           # auto: query if '?' else write
     send_gpib.py <ip> --binary "<scpi>"        # force binary response
     send_gpib.py <ip> --waveform [options]     # capture waveform(s)
-    send_gpib.py <ip> --hardcopy [options]     # capture screen (TIFF default)
+    send_gpib.py <ip> --hardcopy [options]     # capture screen (PCXCOLOR -> PNG default)
+    send_gpib.py <ip> --default-addr N         # persist gateway default addr
     send_gpib.py --help                         # full per-flag help
 
 Output files
@@ -37,7 +38,8 @@ TDS784A supports up to 500 000 points per record (option 1M). Use
 --start-index/--end-index (1-based inclusive) to crop in the
 instrument via DATA:START / DATA:STOP - only the requested range
 crosses the GPIB bus. Windows larger than --chunk-bytes (default
-32 KiB) are chunked transparently to fit the gateway's 64 KiB buffer.
+32 KiB) are still split per-CURVE? to keep each Python bytes object
+small; the gateway itself streams unbounded binary payloads.
 
 Examples
 --------
@@ -58,11 +60,11 @@ Examples
     send_gpib.py 192.168.1.42 --waveform --points 500000 \\
                  --start-index 100000 --end-index 105000
 
-    # Screen hardcopy as TIFF -> <stamp>_screen.tif
+    # Screen hardcopy: PCXCOLOR fetched, converted to PNG -> <stamp>_screen.png
     send_gpib.py 192.168.1.42 --hardcopy
 
-    # Hardcopy as BMP color, custom name
-    send_gpib.py 192.168.1.42 --hardcopy --hardcopy-format BMPCOLOR --name run42
+    # Hardcopy as native TIFF (no conversion), custom name
+    send_gpib.py 192.168.1.42 --hardcopy --hardcopy-format TIFF --name run42
 
     # Different scope GPIB address
     send_gpib.py 192.168.1.42 --addr 5 "*IDN?"
@@ -112,9 +114,10 @@ def parse_args(argv):
     p.add_argument("--hardcopy", action="store_true",
                    help="Capture the scope screen as an image (default TIFF). "
                         "Saved to <stamp>_<name>.<ext>.")
-    p.add_argument("--hardcopy-format", default="TIFF",
+    p.add_argument("--hardcopy-format", default="PCXCOLOR",
                    choices=("TIFF", "BMP", "BMPCOLOR", "PCX", "PCXCOLOR", "RLE"),
-                   help="HARDCOPY:FORMAT value (default TIFF)")
+                   help="HARDCOPY:FORMAT value (default PCXCOLOR; PCX/PCXCOLOR are "
+                        "auto-converted to PNG on disk)")
     p.add_argument("--hardcopy-layout", default="PORTRAIT",
                    choices=("PORTRAIT", "LANDSCAPE"),
                    help="HARDCOPY:LAYOUT value (default PORTRAIT)")
@@ -131,7 +134,7 @@ def parse_args(argv):
                         "(default --points). Maps to DATA:STOP.")
     p.add_argument("--chunk-bytes", type=int, default=32768,
                    help="Max bytes per CURVE? response; larger windows are split into "
-                        "chunks transparently (default 32768; the gateway caps at ~64KiB).")
+                        "chunks transparently (default 32768).")
     p.add_argument("--source", default="CH1",
                    help="Source channel(s), comma-separated (default CH1, e.g. CH1,CH2)")
     p.add_argument("--width", type=int, default=1, choices=(1, 2),
@@ -142,12 +145,17 @@ def parse_args(argv):
     p.add_argument("--out", default="",
                    help="Output formats, comma-separated: csv, bin. "
                         "Default for --waveform is 'csv'; for other commands no file is written.")
+    p.add_argument("--default-addr", type=int, default=None,
+                   help="Set the gateway's persisted default GPIB address (1..30) and exit.")
     args = p.parse_args(argv)
-    n_modes = sum(bool(x) for x in (args.waveform, args.hardcopy))
+    n_modes = sum(bool(x) for x in (args.waveform, args.hardcopy, args.default_addr is not None))
     if n_modes > 1:
-        p.error("--waveform and --hardcopy are mutually exclusive")
-    if not args.waveform and not args.hardcopy and not args.command:
-        p.error("a SCPI command, --waveform, or --hardcopy is required")
+        p.error("--waveform, --hardcopy, --default-addr are mutually exclusive")
+    if (not args.waveform and not args.hardcopy and args.default_addr is None
+            and not args.command):
+        p.error("a SCPI command, --waveform, --hardcopy, or --default-addr is required")
+    if args.default_addr is not None and not (1 <= args.default_addr <= 30):
+        p.error("--default-addr must be in 1..30")
     args.formats = parse_formats(args.out)
     args.channels = parse_channels(args.source)
     if args.waveform and not args.formats:
@@ -180,18 +188,48 @@ def parse_ieee_block(buf: bytes) -> bytes:
 
 
 async def one_shot(ws, action, command, addr, timeout):
+    """Send one request, return (meta, payload).
+
+    Binary actions stream: a 'stream:begin' JSON, N binary frames, then
+    a 'stream:end' JSON with total length. We accumulate frames until
+    the end JSON arrives. The returned `meta` is the end JSON (so
+    callers see ok/error/length); `payload` is the joined bytes."""
     rid = str(int(time.time() * 1000))
     req = make_request(rid, action, command, addr, timeout)
     print(f"-> {req}")
     await ws.send(json.dumps(req))
+
+    # First reply is always JSON.
     text = await asyncio.wait_for(ws.recv(), timeout=timeout / 1000 + 3)
     print(f"<- {text}")
     meta = json.loads(text)
-    payload = None
-    if meta.get("binary"):
+
+    if meta.get("stream") == "begin":
+        chunks = []
+        # Per-frame timeout: long enough for the scope's first-byte
+        # latency (e.g. HARDCOPY rendering) and slow GPIB transfers.
+        per_frame_to = max(timeout / 1000 + 30, 60)
+        while True:
+            frame = await asyncio.wait_for(ws.recv(), timeout=per_frame_to)
+            if isinstance(frame, (bytes, bytearray)):
+                chunks.append(bytes(frame))
+            else:
+                end = json.loads(frame)
+                print(f"<- {end}")
+                payload = b"".join(chunks)
+                expected = end.get("length")
+                if end.get("ok") and expected is not None and expected != len(payload):
+                    print(f"warning: stream length mismatch "
+                          f"(got {len(payload)}, expected {expected})")
+                print(f"<- (binary {len(payload)} bytes total in "
+                      f"{len(chunks)} frame(s))")
+                return end, (payload if end.get("ok") else None)
+    elif meta.get("binary"):
+        # Legacy single-frame binary fallback (older firmware).
         payload = await asyncio.wait_for(ws.recv(), timeout=timeout / 1000 + 3)
         print(f"<- (binary {len(payload)} bytes)")
-    return meta, payload
+        return meta, payload
+    return meta, None
 
 
 def decode_samples(body: bytes, width: int):
@@ -472,6 +510,28 @@ def write_multi_csv(path, captures, metadata):
           f"and {n_meta} metadata entries to {path}{suffix}")
 
 
+async def run_set_default_addr(args):
+    """Send a set_default_addr control request and exit."""
+    uri = f"ws://{args.host}/ws"
+    async with websockets.connect(uri) as ws:
+        rid = str(int(time.time() * 1000))
+        req = {
+            "request_id": rid,
+            "action": "set_default_addr",
+            "addr": args.default_addr,
+            "timeout_ms": args.timeout,
+        }
+        print(f"-> {req}")
+        await ws.send(json.dumps(req))
+        text = await asyncio.wait_for(ws.recv(), timeout=args.timeout / 1000 + 3)
+        print(f"<- {text}")
+        meta = json.loads(text)
+        if not meta.get("ok"):
+            print(f"FAIL: {meta.get('error')}")
+            sys.exit(1)
+        print(f"OK  default GPIB address persisted as {meta.get('addr')}")
+
+
 async def run_simple(args):
     action = "binary_query" if args.binary else ("query" if "?" in args.command else "write")
     uri = f"ws://{args.host}/ws"
@@ -494,6 +554,25 @@ _HARDCOPY_EXT = {
     "PCX": "pcx", "PCXCOLOR": "pcx",
     "RLE": "rle",
 }
+
+# PCX-family is decoded to PNG client-side; the rest is written as-is.
+_HARDCOPY_PNG_FORMATS = {"PCX", "PCXCOLOR"}
+
+
+def pcx_bytes_to_png(pcx_bytes: bytes, png_path: str):
+    """Decode a PCX byte stream and save as PNG. Pillow handles both
+    1-bit/4-bit/8-bit and 24-bit PCX variants the TDS784A emits."""
+    try:
+        from PIL import Image
+    except ImportError:
+        print("ERROR: Pillow is required to convert PCX to PNG. "
+              "Run: uv sync   (after the project pyproject.toml lists 'pillow').",
+              file=sys.stderr)
+        sys.exit(2)
+    import io
+    img = Image.open(io.BytesIO(pcx_bytes))
+    img.load()
+    img.save(png_path, format="PNG")
 
 
 async def run_hardcopy(args):
@@ -533,15 +612,16 @@ async def run_hardcopy(args):
         print(f"FAIL: hardcopy read: {meta.get('error')}")
         sys.exit(1)
 
-    ext = _HARDCOPY_EXT.get(fmt, fmt.lower())
-    path = f"{iso_stamp(capture_time)}_{args.name}.{ext}"
-    with open(path, "wb") as f:
-        f.write(payload)
-    print(f"OK  hardcopy {fmt}  {len(payload)} bytes in {dt:.1f} ms -> {path}")
-    if len(payload) >= 65000:
-        print("note: payload reached the gateway buffer cap (~64 KiB); "
-              "if the image looks truncated, switch to a smaller format "
-              "(e.g. RLE or PCX) or enlarge MAX_BIN_BYTES in the firmware.")
+    if fmt in _HARDCOPY_PNG_FORMATS:
+        path = f"{iso_stamp(capture_time)}_{args.name}.png"
+        pcx_bytes_to_png(payload, path)
+        print(f"OK  hardcopy {fmt} -> PNG  {len(payload)} bytes in {dt:.1f} ms -> {path}")
+    else:
+        ext = _HARDCOPY_EXT.get(fmt, fmt.lower())
+        path = f"{iso_stamp(capture_time)}_{args.name}.{ext}"
+        with open(path, "wb") as f:
+            f.write(payload)
+        print(f"OK  hardcopy {fmt}  {len(payload)} bytes in {dt:.1f} ms -> {path}")
 
 
 async def run_waveform(args):
@@ -577,7 +657,9 @@ async def run_waveform(args):
 def main():
     args = parse_args(sys.argv[1:])
     try:
-        if args.waveform:
+        if args.default_addr is not None:
+            asyncio.run(run_set_default_addr(args))
+        elif args.waveform:
             asyncio.run(run_waveform(args))
         elif args.hardcopy:
             asyncio.run(run_hardcopy(args))

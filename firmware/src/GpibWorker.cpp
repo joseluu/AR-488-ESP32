@@ -12,6 +12,26 @@ static constexpr int TASK_STACK  = 8192;
 static constexpr int TASK_PRIO   = 5;
 static constexpr int TASK_CORE   = 1;
 
+static constexpr const char* PREFS_NS  = "ar488";
+static constexpr const char* PREFS_KEY = "scope_addr";
+
+uint8_t GpibWorker::loadPersistedAddr(uint8_t fallback) {
+    Preferences p;
+    if (!p.begin(PREFS_NS, /*readOnly=*/true)) return fallback;
+    uint8_t v = p.getUChar(PREFS_KEY, fallback);
+    p.end();
+    return (v >= 1 && v <= 30) ? v : fallback;
+}
+
+void GpibWorker::setDefaultAddr(uint8_t addr) {
+    if (addr < 1 || addr > 30) return;
+    scopeAddr_ = addr;                                   // visible to other core (volatile)
+    if (prefs_.begin(PREFS_NS, /*readOnly=*/false)) {
+        prefs_.putUChar(PREFS_KEY, addr);
+        prefs_.end();
+    }
+}
+
 bool GpibWorker::begin(GpibBus* bus, AsyncWebSocket* ws, Display* display, uint8_t scopeAddr) {
     bus_       = bus;
     ws_        = ws;
@@ -50,13 +70,60 @@ static void sendResponse(AsyncWebSocket* ws, uint32_t clientId, const JsonDocume
     if (ws) ws->text(clientId, out);
 }
 
-// Cap on a single binary capture. 64 KiB covers a 50000-point CURVE? at
-// 1 byte/sample or a 32000-point capture at 2 bytes/sample with header.
-static constexpr size_t MAX_BIN_BYTES = 65536;
+// Streaming chunk size for binary payloads. Each filled chunk is sent
+// as one WebSocket binary frame; total payload is unbounded by RAM.
+static constexpr size_t BIN_CHUNK_BYTES = 8192;
+
+struct BinStreamCtx {
+    AsyncWebSocket* ws;
+    uint32_t        clientId;
+};
+
+// Wait for the WS client's send queue to drain, then push one chunk.
+// Returning false aborts the GPIB read.
+static bool binStreamCb(void* ctx, const uint8_t* data, size_t len, bool /*isLast*/) {
+    BinStreamCtx* sc = static_cast<BinStreamCtx*>(ctx);
+    if (!sc || !sc->ws) return false;
+
+    // Backpressure: poll canSend() with a 5 s ceiling so a stalled
+    // client can't pin us forever.
+    uint32_t t0 = millis();
+    AsyncWebSocketClient* c = sc->ws->client(sc->clientId);
+    while (c && !c->canSend()) {
+        if (millis() - t0 > 5000) return false;
+        vTaskDelay(pdMS_TO_TICKS(2));
+        c = sc->ws->client(sc->clientId);
+    }
+    if (!c) return false;
+
+    sc->ws->binary(sc->clientId, data, len);
+    return true;
+}
 
 void GpibWorker::handle(const GpibRequest& req) {
     JsonDocument resp;
     resp["request_id"] = req.request_id;
+
+    // Control actions (no GPIB bus access).
+    if (strcmp(req.action, "set_default_addr") == 0) {
+        if (req.addr < 1 || req.addr > 30) {
+            resp["ok"] = false;
+            resp["error"] = "addr out of range (1..30)";
+        } else {
+            setDefaultAddr(req.addr);
+            resp["ok"] = true;
+            resp["addr"] = req.addr;
+        }
+        sendResponse(ws_, req.client_id, resp);
+        if (display_) display_->log("Addr <- %u", (unsigned)req.addr);
+        return;
+    }
+    if (strcmp(req.action, "get_default_addr") == 0) {
+        resp["ok"] = true;
+        resp["addr"] = (uint8_t)scopeAddr_;
+        sendResponse(ws_, req.client_id, resp);
+        return;
+    }
 
     uint8_t addr = req.addr ? req.addr : scopeAddr_;
 
@@ -77,38 +144,57 @@ void GpibWorker::handle(const GpibRequest& req) {
     uint32_t timeout = req.timeout_ms ? req.timeout_ms : 2000;
 
     if (isBinary) {
-        // Heap-allocate the binary buffer so we don't blow the worker stack
-        // and so the memory is freed promptly after the WS send.
-        uint8_t* buf = (uint8_t*)malloc(MAX_BIN_BYTES);
-        if (!buf) {
+        // Stream the GPIB payload in BIN_CHUNK_BYTES chunks: a "begin"
+        // JSON envelope, N binary WS frames, then an "end" JSON with
+        // total length (or error). This lets us pass screen bitmaps or
+        // 500 K-point CURVE? captures without holding the whole thing
+        // in RAM.
+        uint8_t* chunk = (uint8_t*)malloc(BIN_CHUNK_BYTES);
+        if (!chunk) {
             resp["ok"] = false;
             resp["error"] = "oom";
             sendResponse(ws_, req.client_id, resp);
             if (display_) display_->log("ERR oom bin");
             return;
         }
-        int n;
+
+        // Open envelope.
+        {
+            JsonDocument open;
+            open["request_id"] = req.request_id;
+            open["ok"] = true;
+            open["binary"] = true;
+            open["stream"] = "begin";
+            sendResponse(ws_, req.client_id, open);
+        }
+
+        BinStreamCtx sc{ ws_, req.client_id };
+        int total;
         if (strcmp(req.action, "binary_read") == 0) {
-            n = bus_->receiveRaw(addr, buf, MAX_BIN_BYTES, timeout);
+            total = bus_->receiveRawStream(addr, chunk, BIN_CHUNK_BYTES,
+                                           binStreamCb, &sc, timeout);
         } else {
-            n = bus_->queryRaw(addr, req.command, buf, MAX_BIN_BYTES, timeout);
+            total = bus_->queryRawStream(addr, req.command, chunk, BIN_CHUNK_BYTES,
+                                         binStreamCb, &sc, timeout);
         }
-        bool ok = (n > 0);
+        free(chunk);
 
-        resp["ok"] = ok;
-        resp["binary"] = true;
-        resp["length"] = ok ? n : 0;
-        if (!ok) resp["error"] = "gpib timeout";
-        sendResponse(ws_, req.client_id, resp);
-
-        if (ok && ws_) {
-            // AsyncWebSocket::binary copies the payload; we can free
-            // immediately afterwards.
-            ws_->binary(req.client_id, buf, (size_t)n);
+        // Close envelope.
+        JsonDocument close_;
+        close_["request_id"] = req.request_id;
+        close_["binary"] = true;
+        close_["stream"] = "end";
+        if (total > 0) {
+            close_["ok"] = true;
+            close_["length"] = total;
+        } else {
+            close_["ok"] = false;
+            close_["error"] = "gpib timeout";
+            close_["length"] = 0;
         }
-        free(buf);
+        sendResponse(ws_, req.client_id, close_);
 
-        if (display_) display_->log("%s bin %d", ok ? "OK" : "ER", n);
+        if (display_) display_->log("%s bin %d", total > 0 ? "OK" : "ER", total);
         return;
     }
 

@@ -1,1 +1,13 @@
-{}
+{
+  "permissions": {
+    "allow": [
+      "Bash(~/.platformio/penv/bin/pio run *)",
+      "Read(//c/Users/josel/.platformio/penv/Scripts/**)",
+      "Read(//c/Users/josel/.platformio/penv/**)",
+      "Bash(~/.platformio/penv/Scripts/pio.exe run *)",
+      "Bash(uv sync *)",
+      "Bash(uv pip *)",
+      "Bash(uv run *)"
+    ]
+  }
+}
