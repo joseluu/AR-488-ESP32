@@ -1,0 +1,24 @@
+Connecting to ws://192.168.11.175/ws (GPIB addr=1, timeout=5000 ms)...
+
+=== Phase 1: heartbeat (*IDN? x 200) ===
+Phase 1: 200/200 OK in 13.2s (15.2 req/s)
+
+=== Phase 2: bulk read (CURVE? x 20, 15000 pts) ===
+Phase 2: 20/20 OK in 10.0s
+  payload bytes per iter: min=15000 max=15000
+  per-CURVE? wall time: min=270 median=290 max=3844 ms
+
+=== Phase 3: bulk write (MESSAGE:SHOW x 50, 1024 chars) ===
+Phase 3: 50/50 OK in 16.2s
+
+=== Phase 4: screen capture (HARDCOPY BMP) ===
+  read 308278 bytes in 12967 ms -> 2026-05-04T19-28-25_stress_screen.bmp
+  BMP 'BM' magic present: True
+  note: BMP bfSize header=77070 != file size 308278 (known TDS784A quirk)
+  PIL decode OK: mode=P size=(640, 480)
+
+=== Summary ===
+  phase1: PASS
+  phase2: PASS
+  phase3: PASS
+  phase4: PASS

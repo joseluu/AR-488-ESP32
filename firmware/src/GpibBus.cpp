@@ -285,6 +285,14 @@ bool GpibBus::sendData(const char* data, size_t len) {
     return true;
 }
 
+bool GpibBus::sendBytes(const uint8_t* data, size_t len, uint32_t timeoutMs) {
+    for (size_t i = 0; i < len; ++i) {
+        bool eoi = (i == len - 1);
+        if (!writeByte(data[i], eoi, timeoutMs)) return false;
+    }
+    return true;
+}
+
 // --------------------------------------------------------------------------
 // High-level helpers.
 
@@ -552,4 +560,87 @@ int GpibBus::query(uint8_t addr, const char* cmd, char* buf, size_t maxLen, uint
     setTalker();
     unlock();
     return n;
+}
+
+// --------------------------------------------------------------------------
+// Binary (tektool) helpers.
+
+bool GpibBus::sendRaw(uint8_t addr, const uint8_t* data, size_t len, uint32_t timeoutMs) {
+    if (!data || len == 0) return false;
+    if (!lock(timeoutMs)) return false;
+    bool ok = addressTalk(/*talker=*/CTRL_ADDR, /*listener=*/addr)
+           && sendBytes(data, len, timeoutMs);
+    unlock();
+    return ok;
+}
+
+bool GpibBus::deviceClear(uint8_t addr, uint32_t timeoutMs) {
+    // IEEE-488.1 SDC (Selected Device Clear) = 0x04, addressed via ATN.
+    static constexpr uint8_t CMD_SDC = 0x04;
+    if (!lock(timeoutMs)) return false;
+    setTalker();
+    assertATN();
+    bool ok = sendCommand(CMD_UNL, timeoutMs)
+           && sendCommand(LAD(addr), timeoutMs)
+           && sendCommand(CMD_SDC, timeoutMs)
+           && sendCommand(CMD_UNL, timeoutMs);
+    releaseATN();
+    unlock();
+    return ok;
+}
+
+int GpibBus::queryBytesStream(uint8_t addr, const uint8_t* tx, size_t txLen,
+                              uint8_t* chunkBuf, size_t chunkSize,
+                              ChunkCb cb, void* ctx, uint32_t timeoutMs,
+                              size_t expectBytes) {
+    if (!tx || txLen == 0 || chunkSize == 0 || !chunkBuf || !cb) return -1;
+    if (!lock(timeoutMs)) return -1;
+
+    Serial.printf("[qbs] addr=%u txLen=%u expect=%u to=%u\n",
+                  addr, (unsigned)txLen, (unsigned)expectBytes,
+                  (unsigned)timeoutMs);
+
+    if (!addressTalk(/*talker=*/CTRL_ADDR, /*listener=*/addr) ||
+        !sendBytes(tx, txLen, timeoutMs)) {
+        Serial.println("[qbs] write phase FAILED");
+        unlock();
+        return -1;
+    }
+
+    delay(2);
+
+    if (!addressTalk(/*talker=*/addr, /*listener=*/CTRL_ADDR)) {
+        Serial.println("[qbs] turn-around FAILED");
+        unlock();
+        return -1;
+    }
+    setListener();
+
+    size_t total = 0;
+    size_t fill  = 0;
+    bool   ok    = true;
+    bool   done  = false;
+    while (!done) {
+        uint8_t b;
+        bool eoi;
+        if (!readByte(b, eoi, timeoutMs)) {
+            Serial.printf("[qbs] readByte timeout after %u bytes\n",
+                          (unsigned)total);
+            ok = false;
+            break;
+        }
+        chunkBuf[fill++] = b;
+        total++;
+        if (eoi) done = true;
+        if (expectBytes > 0 && total >= expectBytes) done = true;
+        if (fill == chunkSize || done) {
+            if (!cb(ctx, chunkBuf, fill, done)) { ok = false; break; }
+            fill = 0;
+        }
+    }
+
+    Serial.printf("[qbs] done ok=%d total=%u\n", ok ? 1 : 0, (unsigned)total);
+    setTalker();
+    unlock();
+    return ok ? (int)total : -1;
 }

@@ -20,9 +20,19 @@ struct GpibRequest {
     uint32_t client_id;
     uint8_t  addr;
     char     request_id[32];
-    char     action[16];                        // "query" | "write" | "read"
+    char     action[16];                        // "query" | "write" | "read" | "write_bytes" | "query_bytes" | "device_clear" | "interface_clear"
     char     command[256];
     uint32_t timeout_ms;
+    // Binary payload for write_bytes / query_bytes (base64-encoded in JSON).
+    // Decoded raw bytes live in payload[0..payload_len). Empty for the
+    // ASCII actions above.
+    uint8_t  payload[1200];
+    uint16_t payload_len;
+    // For query_bytes only: number of bytes the host expects in the reply.
+    // 0 = read until EOI (legacy behaviour). >0 = stop after that many bytes.
+    // tektool's binary protocol never asserts EOI, so the host must pass the
+    // exact reply length here.
+    uint16_t expect_bytes;
 };
 
 class GpibWorker {

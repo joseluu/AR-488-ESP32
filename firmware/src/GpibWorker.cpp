@@ -134,13 +134,18 @@ void GpibWorker::handle(const GpibRequest& req) {
 
     uint8_t addr = req.addr ? req.addr : scopeAddr_;
 
-    bool isQuery   = (strcmp(req.action, "query") == 0);
-    bool isWrite   = (strcmp(req.action, "write") == 0) || (strcmp(req.action, "send") == 0);
-    bool isRead    = (strcmp(req.action, "read")  == 0);
-    bool isBinary  = (strcmp(req.action, "binary_query") == 0)
-                  || (strcmp(req.action, "binary_read")  == 0);
+    bool isQuery       = (strcmp(req.action, "query") == 0);
+    bool isWrite       = (strcmp(req.action, "write") == 0) || (strcmp(req.action, "send") == 0);
+    bool isRead        = (strcmp(req.action, "read")  == 0);
+    bool isBinary      = (strcmp(req.action, "binary_query") == 0)
+                      || (strcmp(req.action, "binary_read")  == 0);
+    bool isWriteBytes  = (strcmp(req.action, "write_bytes")  == 0);
+    bool isQueryBytes  = (strcmp(req.action, "query_bytes")  == 0);
+    bool isDeviceClear = (strcmp(req.action, "device_clear") == 0);
+    bool isIfc         = (strcmp(req.action, "interface_clear") == 0);
 
-    if (!isQuery && !isWrite && !isRead && !isBinary) {
+    if (!isQuery && !isWrite && !isRead && !isBinary &&
+        !isWriteBytes && !isQueryBytes && !isDeviceClear && !isIfc) {
         resp["ok"] = false;
         resp["error"] = "unknown action";
         sendResponse(ws_, req.client_id, resp);
@@ -149,6 +154,97 @@ void GpibWorker::handle(const GpibRequest& req) {
     }
 
     uint32_t timeout = req.timeout_ms ? req.timeout_ms : 2000;
+
+    // -------------------------------------------------------------------
+    // Tektool service-mode actions: binary GPIB send/query, device clear.
+
+    if (isDeviceClear) {
+        bool ok = bus_->deviceClear(addr, timeout);
+        resp["ok"] = ok;
+        if (!ok) resp["error"] = "device_clear failed";
+        sendResponse(ws_, req.client_id, resp);
+        if (display_) display_->log("%s DCL %u", ok ? "OK" : "ER", (unsigned)addr);
+        return;
+    }
+
+    if (isIfc) {
+        // Interface Clear pulse: reasserts controller-in-charge and
+        // forces every device's GPIB chip back to idle. Recovers from
+        // hangs where a previous talker never released the bus.
+        bool ok = bus_->controllerInit();
+        resp["ok"] = ok;
+        if (!ok) resp["error"] = "ifc failed";
+        sendResponse(ws_, req.client_id, resp);
+        if (display_) display_->log("%s IFC", ok ? "OK" : "ER");
+        return;
+    }
+
+    if (isWriteBytes) {
+        if (req.payload_len == 0) {
+            resp["ok"] = false;
+            resp["error"] = "empty payload";
+            sendResponse(ws_, req.client_id, resp);
+            return;
+        }
+        bool ok = bus_->sendRaw(addr, req.payload, req.payload_len, timeout);
+        resp["ok"] = ok;
+        if (ok) resp["length"] = req.payload_len;
+        else    resp["error"]  = "gpib timeout";
+        sendResponse(ws_, req.client_id, resp);
+        if (display_) display_->log("%s wrb %u", ok ? "OK" : "ER", (unsigned)req.payload_len);
+        return;
+    }
+
+    if (isQueryBytes) {
+        if (req.payload_len == 0) {
+            resp["ok"] = false;
+            resp["error"] = "empty payload";
+            sendResponse(ws_, req.client_id, resp);
+            return;
+        }
+        // Same begin/binary-frames/end envelope as binary_query, but the
+        // request side is binary instead of an ASCII SCPI string.
+        uint8_t* chunk = (uint8_t*)malloc(BIN_CHUNK_BYTES);
+        if (!chunk) {
+            resp["ok"] = false;
+            resp["error"] = "oom";
+            sendResponse(ws_, req.client_id, resp);
+            if (display_) display_->log("ERR oom qb");
+            return;
+        }
+        {
+            JsonDocument open;
+            open["request_id"] = req.request_id;
+            open["ok"] = true;
+            open["binary"] = true;
+            open["stream"] = "begin";
+            sendResponse(ws_, req.client_id, open);
+        }
+
+        BinStreamCtx sc{ ws_, req.client_id };
+        int total = bus_->queryBytesStream(addr, req.payload, req.payload_len,
+                                           chunk, BIN_CHUNK_BYTES,
+                                           binStreamCb, &sc, timeout,
+                                           req.expect_bytes);
+        free(chunk);
+
+        JsonDocument close_;
+        close_["request_id"] = req.request_id;
+        close_["binary"] = true;
+        close_["stream"] = "end";
+        if (total > 0) {
+            close_["ok"] = true;
+            close_["length"] = total;
+        } else {
+            close_["ok"] = false;
+            close_["error"] = "gpib timeout";
+            close_["length"] = 0;
+        }
+        sendResponse(ws_, req.client_id, close_);
+
+        if (display_) display_->log("%s qb %d", total > 0 ? "OK" : "ER", total);
+        return;
+    }
 
     if (isBinary) {
         // Stream the GPIB payload in BIN_CHUNK_BYTES chunks: a "begin"

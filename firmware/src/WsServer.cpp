@@ -56,6 +56,41 @@ static void copyTrimmed(char* dst, size_t cap, const char* src) {
     dst[cap - 1] = 0;
 }
 
+// Decode base64 from `src` into `dst` (capacity `dstCap` bytes). Returns
+// the decoded length on success, or -1 if the payload is malformed or
+// would overflow. Accepts standard alphabet (A-Z a-z 0-9 + /), with
+// optional '=' padding. Whitespace and '\0' terminate the input.
+static int b64Decode(const char* src, uint8_t* dst, size_t dstCap) {
+    if (!src) return 0;
+    static int8_t tbl[256];
+    static bool   tblReady = false;
+    if (!tblReady) {
+        for (int i = 0; i < 256; ++i) tbl[i] = -1;
+        const char* a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        for (int i = 0; i < 64; ++i) tbl[(uint8_t)a[i]] = (int8_t)i;
+        tblReady = true;
+    }
+
+    size_t out = 0;
+    uint32_t acc = 0;
+    int bits = 0;
+    for (const char* p = src; *p; ++p) {
+        uint8_t c = (uint8_t)*p;
+        if (c == '=') break;
+        if (c == '\r' || c == '\n' || c == ' ' || c == '\t') continue;
+        int8_t v = tbl[c];
+        if (v < 0) return -1;
+        acc = (acc << 6) | (uint32_t)v;
+        bits += 6;
+        if (bits >= 8) {
+            bits -= 8;
+            if (out >= dstCap) return -1;
+            dst[out++] = (uint8_t)((acc >> bits) & 0xFFu);
+        }
+    }
+    return (int)out;
+}
+
 void WsServer::handleMessage_(AsyncWebSocketClient* client, const uint8_t* data, size_t len) {
     JsonDocument doc;
     DeserializationError err = deserializeJson(doc, data, len);
@@ -76,6 +111,7 @@ void WsServer::handleMessage_(AsyncWebSocketClient* client, const uint8_t* data,
     copyTrimmed(req.command,    sizeof(req.command),    doc["command"]    | "");
     req.addr       = doc["addr"]       | 0;
     req.timeout_ms = doc["timeout_ms"] | 0;
+    req.payload_len = 0;
 
     // GPIB uses EOI as the message terminator — no \n needed.
     // If the caller already included \n/\r, strip it so EOI lands on
@@ -84,6 +120,27 @@ void WsServer::handleMessage_(AsyncWebSocketClient* client, const uint8_t* data,
     size_t cl = strlen(req.command);
     while (cl > 0 && (req.command[cl - 1] == '\n' || req.command[cl - 1] == '\r'))
         req.command[--cl] = 0;
+
+    // Optional binary payload for write_bytes / query_bytes.
+    const char* b64 = doc["payload_b64"] | (const char*)nullptr;
+    if (b64) {
+        int n = b64Decode(b64, req.payload, sizeof(req.payload));
+        if (n < 0) {
+            JsonDocument resp;
+            resp["request_id"] = req.request_id;
+            resp["ok"] = false;
+            resp["error"] = "payload_b64 invalid or too large";
+            String out;
+            serializeJson(resp, out);
+            client->text(out);
+            return;
+        }
+        req.payload_len = (uint16_t)n;
+    }
+
+    // tektool's binary protocol does not assert EOI; the host tells us
+    // exactly how many bytes to read in the reply.
+    req.expect_bytes = (uint16_t)(doc["expect_bytes"] | 0);
 
     if (!worker_ || !worker_->submit(req)) {
         JsonDocument resp;

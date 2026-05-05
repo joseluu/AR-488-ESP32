@@ -24,3 +24,9 @@ network_creds.h
 *.csv
 *screen.*
 _autosave*
+
+# tektool runtime artefacts (firmware backups + per-session journals).
+host_software/tektool/sessions/*
+host_software/tektool/backups/*
+!host_software/tektool/sessions/.gitkeep
+!host_software/tektool/backups/.gitkeep

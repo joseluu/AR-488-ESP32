@@ -640,6 +640,7 @@ async def measure(
     ch: int,
     kind: str,
     source2: Optional[str] = None,
+    gating: bool = False,
 ) -> dict:
     """Immediate measurement via MEASUREMENT:IMMED. Does NOT disturb the
     on-screen MEAS1..4 slots.
@@ -647,11 +648,18 @@ async def measure(
     kind: AMPL, FREQ, PERIOD, RISE, FALL, PK2PK, MEAN, RMS, CRMS, DUTY,
     HIGH, LOW, MAX, MIN, AREA, CAREA, CMEAN, BURST, NDUTY, NOVERSHOOT,
     NWIDTH, PDUTY, POVERSHOOT, PWIDTH, PHASE, DELAY (delay-type takes source2).
+
+    gating: False → MEASUREMENT:GATING OFF (measure full record).
+            True  → MEASUREMENT:GATING ON  (measure between vertical cursors).
     """
+    g = await _write(f"MEASUREMENT:GATING {'ON' if gating else 'OFF'}")
+    if not _ok(g):
+        return {"ok": False, "error": _err(g), "errors_after": await drain_errors()}
     res = await _measure_immed(ch, kind, source2)
     res["kind"] = kind.upper()
     res["source"] = _ch_token(ch)
     res["source2"] = _ch_token(source2) if source2 else None
+    res["gating"] = "ON" if gating else "OFF"
     res["errors_after"] = await drain_errors()
     return res
 
@@ -665,7 +673,7 @@ _SNAPSHOT_KINDS = (
 
 
 @mcp.tool()
-async def measure_snapshot(ch: int) -> dict:
+async def measure_snapshot(ch: int, gating: bool = False) -> dict:
     """All standard immediate measurements for one channel.
 
     On the TDS784A, `MEASUREMENT:SNAPSHOT` only triggers the on-screen
@@ -673,8 +681,14 @@ async def measure_snapshot(ch: int) -> dict:
     once. We fan out individual MEASUREMENT:IMMED queries for the same
     set the on-screen snapshot displays (~23 round-trips, a few seconds).
 
+    gating: False → MEASUREMENT:GATING OFF (measure full record).
+            True  → MEASUREMENT:GATING ON  (measure between vertical cursors).
+
     Returns {kind: {value, unit}} for each measurement that succeeded."""
     chtok = _ch_token(ch)
+    g = await _write(f"MEASUREMENT:GATING {'ON' if gating else 'OFF'}")
+    if not _ok(g):
+        return {"ok": False, "error": _err(g)}
     # Set the IMMED source first so the on-screen overlay (next line)
     # measures the requested channel.
     src = await _write(f"MEASUREMENT:IMMED:SOURCE1 {chtok}")
@@ -703,6 +717,7 @@ async def measure_snapshot(ch: int) -> dict:
     return {
         "ok": True,
         "source": chtok,
+        "gating": "ON" if gating else "OFF",
         "measurements": results,
         "errors_after": await drain_errors(),
     }

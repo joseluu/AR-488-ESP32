@@ -38,6 +38,12 @@ public:
     int  receiveRaw(uint8_t addr, uint8_t* buf, size_t maxLen, uint32_t timeoutMs = 2000);
     int  queryRaw(uint8_t addr, const char* cmd, uint8_t* buf, size_t maxLen, uint32_t timeoutMs = 2000);
 
+    // Binary write / write+read with no string termination. EOI asserted
+    // on the last byte. Used by tektool service-mode flashing where the
+    // payload contains 0x00 bytes.
+    bool sendRaw(uint8_t addr, const uint8_t* data, size_t len, uint32_t timeoutMs = 2000);
+    bool deviceClear(uint8_t addr, uint32_t timeoutMs = 2000);    // addressed SDC (0x04)
+
     // Streaming variants. Read until EOI, calling `cb` whenever the
     // chunk buffer fills or EOI is reached. The buffer is reused
     // between chunks; the callback must finish with the data before
@@ -48,6 +54,19 @@ public:
     int  queryRawStream(uint8_t addr, const char* cmd,
                         uint8_t* chunkBuf, size_t chunkSize,
                         ChunkCb cb, void* ctx, uint32_t timeoutMs = 2000);
+
+    // Binary write+read variant of queryRawStream. Used by tektool's
+    // memory_read packet: send 'm' header + addr + len, then stream the
+    // reply (which contains arbitrary bytes including LF/0x00).
+    //
+    // expectBytes:
+    //   0   - read until EOI (caller relies on EOI termination)
+    //   >0  - read until that many bytes received OR EOI, whichever first
+    //         (used for tektool which never asserts EOI on its replies)
+    int  queryBytesStream(uint8_t addr, const uint8_t* tx, size_t txLen,
+                          uint8_t* chunkBuf, size_t chunkSize,
+                          ChunkCb cb, void* ctx, uint32_t timeoutMs = 2000,
+                          size_t expectBytes = 0);
 
     // Mutex (public so callers can group multiple ops in one critical section).
     bool lock(uint32_t timeoutMs = 2000);
@@ -81,4 +100,5 @@ private:
 
     bool addressTalk(uint8_t talker, uint8_t listener);
     bool sendData(const char* data, size_t len);
+    bool sendBytes(const uint8_t* data, size_t len, uint32_t timeoutMs);
 };
