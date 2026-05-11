@@ -1,12 +1,21 @@
-# AR-488-ESP32
+# MCP-AR-488-ESP32
+
+## Intro and goal
+
+The idea is to have AI help me build electronics. AI needs eyes, the eyes are the oscilloscope which is used through an MCP interface.
+
+The IEEE-488 controler is meant to expose an HTTP API which in turn is used by the MCP server.
+
+
+## Build
 
 GPIB/IEEE-488 interface board for the **Tektronix TDS784A** oscilloscope, based on an ESP32 (Heltec WiFi Kit 32) with GPIB bus transceivers. The board plugs directly onto the instrument's Centronics 24-pin GPIB connector.
 
-This project is inspired by the [AR-488](https://github.com/Twilight-Logic/AR488) Arduino GPIB adapter, redesigned around the ESP32 for WiFi capability and higher throughput.
+This project is inspired by the [AR-488](https://github.com/Twilight-Logic/AR488) Arduino GPIB adapter, redesigned around the ESP32 for WiFi capability and higher throughput. There are ESP32 projects, such as: https://github.com/douardda/AR488-ESP32 I discovered them after having finished this one. Other projects are using the prologic serial protocol, their hardware most likely may be reflashed with the firmware here.
 
 ![In use on a 784](docs/PCB_in_use.jpg)
 
-This is work in progress, however the PCB works, requiring some modifications:
+There are a few quirks, however the PCB works, requiring some modifications (soldering):
 * to supply 3.3V instead of 5.0 V to the MCP chip (because I used a V1 ESP32 board and I thought I had V2)
 * add the I2C pullups
 * remove 3mm from the left side to fit directly behind the TDS784
@@ -18,7 +27,7 @@ See file [IMPROVEMENTS_V2.md](IMPROVEMENTS_V2.md) for further improvements (whic
 
 ## Design workflow and caveats
 
-The PCB has been designed with circuit-synth and claude.
+The PCB has been designed using AI as well, where claude is driving circuit-synth which in turn generates the kicad schematic. Routing has been handled manually.
 
 Circuit-synth required a modification to work under Windows and git-bash (see my circuit-synth repo). Another circuit-synth
 anoyance is that circuit-synth used hierachical connectors on the same sheet, this was giving warnings in the kicad rules checker.
