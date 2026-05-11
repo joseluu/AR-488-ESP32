@@ -60,7 +60,7 @@ uv run --with websockets python firmware/test/send_gpib.py --waveform --points 5
 # getting a screen copy in .tif format
 uv run --with websockets python firmware/test/send_gpib.py 192.168.11.175 --hardcopy
 ```
-#### CSV example
+#### downloaded CSV scope curve example
 ![CSV being used in LibreOfficeCalc](docs/CSV_rendering.png)
 #### Screen copy through GPIB and host software send_gpib.py
 ![Screen copy through GPIB](docs/example_screen.png)
